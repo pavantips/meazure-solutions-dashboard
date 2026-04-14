@@ -4,6 +4,7 @@ client/node_modules/
 
 # Environment — contains auth tokens, NEVER commit
 .env
+streamlit/.env
 
 # Build output
 client/dist/
