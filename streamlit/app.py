@@ -157,7 +157,7 @@ def page_create_user():
                     time_zone_id=tz, user_password=password,
                     time_sent=now_iso())
         with st.spinner("Calling API..."):
-            result = post_form(f"{DEMO_BASE}/editStudent/", body)
+            result = post_form(f"{API_BASE}/editStudent/", body)
         st.session_state["last_result"] = result
 
     show_response(st.session_state.get("last_result"))
@@ -183,7 +183,7 @@ def page_auto_login():
         body = dict(student_id=student_id, email=email,
                     first_name=first_name, last_name=last_name, time_sent=now_iso())
         with st.spinner("Calling API..."):
-            result = post_form(f"{DEMO_BASE}/autoLogin/", body)
+            result = post_form(f"{API_BASE}/autoLogin/", body)
         st.session_state["last_result"] = result
 
     show_response(st.session_state.get("last_result"))
@@ -349,7 +349,7 @@ def page_record_plus():
                     exam_id=exam_id, exam_url=exam_url, permitted_resources_list=perm_res,
                     other_resources=other_res, preset=preset)
         with st.spinner("Calling API..."):
-            result = post_json(f"{GO_BASE}/exams/add_record_plus_exams", body)
+            result = post_json(f"{API_BASE}/exams/add_record_plus_exams", body)
         st.session_state["last_result"] = result
 
     show_response(st.session_state.get("last_result"))
@@ -370,7 +370,7 @@ def page_record_plus_fulfill():
 
     if submitted:
         with st.spinner("Fulfilling..."):
-            result = post_form(f"{DEMO_BASE}/exams/add_record_plus_exams/fulfill",
+            result = post_form(f"{API_BASE}/exams/add_record_plus_exams/fulfill",
                                {"reservation_uuid": res_uuid})
         st.session_state["last_result"] = result
 
