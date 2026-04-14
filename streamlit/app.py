@@ -210,14 +210,16 @@ def page_add_bluebird():
         duration    = c5.number_input("duration (min)", value=60, step=15)
         tz          = c6.selectbox("time_zone_id",  TIMEZONES)
         exam_url    = st.text_input("exam_url",     value="https://canvas.instructure.com/exam")
-        start_date  = st.text_input("start_date",   value=(datetime.now(timezone.utc) + timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ"))
+        c7, c8 = st.columns(2)
+        start_date  = c7.text_input("start_date",  value=(datetime.now(timezone.utc) + timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ"))
+        end_date    = c8.text_input("end_date",    value=(datetime.now(timezone.utc) + timedelta(days=8)).strftime("%Y-%m-%dT%H:%M:%SZ"))
         submitted   = st.form_submit_button("⚡ Send Request", use_container_width=True)
 
     if submitted:
         body = dict(first_name=first_name, last_name=last_name, email=email,
                     student_id=student_id, exam_id=exam_id, description=description,
                     duration=str(duration), time_zone_id=tz, exam_url=exam_url,
-                    start_date=start_date, time_sent=now_iso())
+                    start_date=start_date, end_date=end_date, time_sent=now_iso())
         with st.spinner("Calling API..."):
             result = post_json(f"{API_BASE}/addBlueBirdExam", body)
         st.session_state["last_result"] = result
