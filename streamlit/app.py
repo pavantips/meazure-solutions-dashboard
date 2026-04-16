@@ -676,26 +676,24 @@ def page_tc_delivery_windows():
 
 
 def page_tc_test_locations():
-    st.markdown("**`GET`** `.../institutions/{uuid}/exams/{uuid}/test_center_locations`")
+    st.markdown("**`GET`** `api.proctoru.com/api/v2/test_center_locations?search=...&exam_uuid=...&delivery_window_uuid=...`")
     st.title("TC: Test Locations")
     st.caption("Returns available test center locations. Saves vendor_uuid and tc_location_id to session.")
-    iid = get_ctx("institution_uuid"); eid = get_ctx("exam_uuid")
-    dwid = get_ctx("delivery_window_uuid")
-    if iid or eid:
+    eid = get_ctx("exam_uuid"); dwid = get_ctx("delivery_window_uuid")
+    if eid or dwid:
         st.info("💡 Pre-filled from session.")
     with st.form("tc_locations"):
         c1, c2 = st.columns(2)
         exam_uuid            = c1.text_input("exam_uuid",            value=eid,  placeholder="From TC: Get Exams")
         delivery_window_uuid = c2.text_input("delivery_window_uuid", value=dwid, placeholder="From TC: Delivery Windows")
-        institution_uuid     = st.text_input("institution_uuid",     value=iid,  placeholder="From TC: Get Institution")
         search               = st.text_input("search (zip code)",    value="60601")
         submitted            = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
-        url = f"{TC_BASE}/institutions/{institution_uuid}/exams/{exam_uuid}/test_center_locations"
         with st.spinner("Calling API..."):
-            result = get_params(url, {"search": search, "delivery_window_uuid": delivery_window_uuid, "time_sent": now_iso()})
-        extract_and_save(result, institution_uuid=institution_uuid,
-                         exam_uuid=exam_uuid, delivery_window_uuid=delivery_window_uuid)
+            result = get_params(f"{TC_BASE}/test_center_locations",
+                                {"search": search, "exam_uuid": exam_uuid,
+                                 "delivery_window_uuid": delivery_window_uuid})
+        extract_and_save(result, exam_uuid=exam_uuid, delivery_window_uuid=delivery_window_uuid)
         st.session_state["last_result"] = result
     show_response(st.session_state.get("last_result"))
 
