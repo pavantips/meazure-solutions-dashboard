@@ -4,8 +4,8 @@ import { sectionCard, sectionLabel, inputStyle, labelStyle, submitBtn } from '..
 
 export default function TCAvailability() {
   const [form, setForm] = useState({
-    vendor_uuid:              '347202b7-aa08-4aab-bbaf-a2a84d0880ae',
-    test_center_location_id:  '9940',
+    vendor_uuid:    '347202b7-aa08-4aab-bbaf-a2a84d0880ae',
+    tc_location_id: '9940',
     exam_uuid:                'fde1eebd-3826-45de-8ae8-ebef62747fc7',
     delivery_window_uuid:     '1d3637c1-c338-49b3-9b41-f5f4724ad8bf',
     start_time:               '2026-06-25T17:52:51Z',
@@ -36,10 +36,10 @@ export default function TCAvailability() {
       <div style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
           <span style={{ display:'inline-block', background:'#dbeafe', color:'#1e40af', fontSize:'11px', fontWeight:'700', padding:'3px 8px', borderRadius:'5px' }}>GET</span>
-          <code style={{ fontSize: '13px', color: '#6b7280', fontFamily: 'monospace' }}>go.proctoru.com/api/v2/test_center_locations/:vendor_uuid/:tc_location_id/time_slots</code>
+          <code style={{ fontSize: '13px', color: '#6b7280', fontFamily: 'monospace' }}>api.proctoru.com/api/v2/test_center_locations/:vendor_uuid/:tc_location_id/time_slots</code>
         </div>
         <h1 style={{ fontSize: '22px', fontWeight: '700', color: '#111827', marginBottom: '4px' }}>Get Availability Slots</h1>
-        <p style={{ fontSize: '13px', color: '#6b7280' }}>Returns available time slots at a specific test center location. Get <strong>vendor_uuid</strong> and <strong>test_center_location_id</strong> from Get Test Locations.</p>
+        <p style={{ fontSize: '13px', color: '#6b7280' }}>Returns available time slots at a specific test center location. Get <strong>vendor_uuid</strong> and <strong>tc_location_id</strong> from Get Test Locations.</p>
       </div>
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
@@ -54,8 +54,8 @@ export default function TCAvailability() {
                   <p style={{ fontSize:'11px', color:'#9ca3af', marginTop:'4px' }}>From Get Test Locations response</p>
                 </div>
                 <div>
-                  <label style={labelStyle}>test_center_location_id</label>
-                  <input value={form.test_center_location_id} onChange={e => set('test_center_location_id', e.target.value)}
+                  <label style={labelStyle}>tc_location_id</label>
+                  <input value={form.tc_location_id} onChange={e => set('tc_location_id', e.target.value)}
                     style={inputStyle} required />
                 </div>
               </div>

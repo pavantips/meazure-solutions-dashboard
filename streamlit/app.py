@@ -699,9 +699,9 @@ def page_tc_test_locations():
 
 
 def page_tc_availability():
-    st.markdown("**`GET`** `.../vendors/{uuid}/tc_locations/{id}/availability`")
+    st.markdown("**`GET`** `api.proctoru.com/api/v2/test_center_locations/{vendor_uuid}/{tc_location_id}/time_slots`")
     st.title("TC: Availability")
-    st.caption("Returns available appointment time slots.")
+    st.caption("Returns available appointment time slots for a test center location.")
     vid = get_ctx("vendor_uuid"); loc = get_ctx("tc_location_id")
     eid = get_ctx("exam_uuid");   dwid = get_ctx("delivery_window_uuid")
     if vid or loc:
@@ -718,7 +718,7 @@ def page_tc_availability():
         end_time   = c6.text_input("end_time",   value=(datetime.now(timezone.utc) + timedelta(days=14)).strftime("%Y-%m-%dT%H:%M:%SZ"))
         submitted  = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
-        url = f"{TC_GO_BASE}/vendors/{vendor_uuid}/tc_locations/{tc_location_id}/availability"
+        url = f"{TC_BASE}/test_center_locations/{vendor_uuid}/{tc_location_id}/time_slots"
         with st.spinner("Calling API..."):
             result = get_params(url, {"exam_uuid": exam_uuid, "delivery_window_uuid": delivery_window_uuid,
                                       "start_time": start_time, "end_time": end_time})

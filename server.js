@@ -225,10 +225,10 @@ app.post('/api/proxy/tc/testLocations', (req, res) => {
   forwardGet(res, `${TC_BASE}/test_center_locations`, { search, exam_uuid, delivery_window_uuid });
 });
 
-// GET go.proctoru.com/api/v2/test_center_locations/:vendor_uuid/:tc_location_id/time_slots
+// GET api.proctoru.com/api/v2/test_center_locations/:vendor_uuid/:tc_location_id/time_slots
 app.post('/api/proxy/tc/availability', (req, res) => {
-  const { vendor_uuid, test_center_location_id, exam_uuid, delivery_window_uuid, start_time, end_time } = req.body;
-  const url = `${TC_GO_BASE}/test_center_locations/${vendor_uuid}/${test_center_location_id}/time_slots`;
+  const { vendor_uuid, tc_location_id, exam_uuid, delivery_window_uuid, start_time, end_time } = req.body;
+  const url = `${TC_BASE}/test_center_locations/${vendor_uuid}/${tc_location_id}/time_slots`;
   forwardGet(res, url, { exam_uuid, delivery_window_uuid, start_time, end_time });
 });
 
