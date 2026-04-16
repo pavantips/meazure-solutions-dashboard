@@ -640,7 +640,7 @@ def page_tc_get_exams():
         institution_uuid = st.text_input("institution_uuid", value=iid,
                                           placeholder="Run TC: Get Institution first")
         c1, c2 = st.columns(2)
-        modality = c1.selectbox("modality", ["", "live_plus", "record_plus", "automated"])
+        modality = c1.selectbox("modality", ["", "in_person", "live_plus", "record_plus", "automated"])
         active   = c2.selectbox("active",   ["true", "false", ""])
         submitted = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
