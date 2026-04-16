@@ -655,9 +655,9 @@ def page_tc_get_exams():
 
 
 def page_tc_delivery_windows():
-    st.markdown("**`GET`** `.../institutions/{uuid}/exams/{uuid}/delivery_windows`")
+    st.markdown("**`GET`** `api.proctoru.com/api/v2/delivery_windows?exam_uuid=...&institution_uuid=...`")
     st.title("TC: Delivery Windows")
-    st.caption("Returns delivery windows for an exam. Saves delivery_window_uuid to session.")
+    st.caption("Returns delivery windows for an exam. Both IDs are query params — not path params. Saves delivery_window_uuid to session.")
     iid = get_ctx("institution_uuid"); eid = get_ctx("exam_uuid")
     if iid or eid:
         st.info("💡 Pre-filled from session.")
@@ -667,9 +667,9 @@ def page_tc_delivery_windows():
         exam_uuid        = c2.text_input("exam_uuid",        value=eid, placeholder="From TC: Get Exams")
         submitted        = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
-        url = f"{TC_BASE}/institutions/{institution_uuid}/exams/{exam_uuid}/delivery_windows"
         with st.spinner("Calling API..."):
-            result = get_params(url, {"time_sent": now_iso()})
+            result = get_params(f"{TC_BASE}/delivery_windows",
+                                {"exam_uuid": exam_uuid, "institution_uuid": institution_uuid})
         extract_and_save(result, institution_uuid=institution_uuid, exam_uuid=exam_uuid)
         st.session_state["last_result"] = result
     show_response(st.session_state.get("last_result"))

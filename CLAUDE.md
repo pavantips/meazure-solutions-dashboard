@@ -146,3 +146,4 @@ and auto-fills downstream forms once upstream calls succeed.
 - `whoami` (TC): no inputs needed — auth token alone returns the institution
 - `add_record_plus_exams/fulfill`: form-encoded with just `reservation_uuid`
 - TC: Get Exams `modality` valid values: `in_person`, `live_plus`, `record_plus`, `automated`
+- TC: Delivery Windows: flat URL `/api/v2/delivery_windows` with `exam_uuid` + `institution_uuid` as **query params** — NOT nested path params like `/institutions/{uuid}/exams/{uuid}/delivery_windows`
