@@ -164,6 +164,18 @@ app.post('/api/proxy/getReservations', (req, res) => {
   forwardGet(res, `${API_BASE}/getStudentReservationList/`, { time_sent, student_id, status });
 });
 
+// Bluebird Client Activity Report — api.proctoru.com, form-encoded
+app.post('/api/proxy/bluebirdClientActivity', (req, res) =>
+  forwardForm(res, `${API_BASE}/bluebirdclientActivityReport/`, req.body));
+
+// Client Activity Report — api.proctoru.com, form-encoded
+app.post('/api/proxy/clientActivityReport', (req, res) =>
+  forwardForm(res, `${API_BASE}/clientActivityReport/`, req.body));
+
+// Pending Exam Report — api.proctoru.com, form-encoded
+app.post('/api/proxy/pendingExamReport', (req, res) =>
+  forwardForm(res, `${API_BASE}/pendingExamReport/`, req.body));
+
 // Begin Reservation — stub (curl coming soon)
 app.post('/api/proxy/beginReservation', (req, res) =>
   forwardForm(res, `${API_BASE}/beginReservation/`, req.body));

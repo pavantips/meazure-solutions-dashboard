@@ -18,7 +18,10 @@ const userEvents = [
 ];
 
 const reports = [
-  { label: 'Get Reservations', path: '/get-reservations', method: 'GET' },
+  { label: 'Get Reservations',          path: '/get-reservations',           method: 'GET'  },
+  { label: 'Bluebird Client Activity',  path: '/bluebird-client-activity',   method: 'POST' },
+  { label: 'Client Activity Report',    path: '/client-activity-report',     method: 'POST' },
+  { label: 'Pending Exam Report',       path: '/pending-exam-report',        method: 'POST' },
 ];
 
 const ltiLinks = [

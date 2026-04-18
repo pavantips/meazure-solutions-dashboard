@@ -14,7 +14,10 @@ import GetAvailability     from './pages/GetAvailability';
 import BeginReservation    from './pages/BeginReservation';
 import MeazureCreateUser   from './pages/MeazureCreateUser';
 import GetReservations    from './pages/GetReservations';
-import CancelReservation  from './pages/CancelReservation';
+import CancelReservation        from './pages/CancelReservation';
+import BluebirdClientActivity   from './pages/BluebirdClientActivity';
+import ClientActivityReport     from './pages/ClientActivityReport';
+import PendingExamReport        from './pages/PendingExamReport';
 import TCGetInstitution  from './pages/TCGetInstitution';
 import TCGetExams         from './pages/TCGetExams';
 import TCDeliveryWindows  from './pages/TCDeliveryWindows';
@@ -49,7 +52,10 @@ export default function App() {
           <Route path="/get-availability"   element={<GetAvailability />} />
 
           {/* ── Reports ── */}
-          <Route path="/get-reservations"   element={<GetReservations />} />
+          <Route path="/get-reservations"          element={<GetReservations />} />
+          <Route path="/bluebird-client-activity"  element={<BluebirdClientActivity />} />
+          <Route path="/client-activity-report"    element={<ClientActivityReport />} />
+          <Route path="/pending-exam-report"       element={<PendingExamReport />} />
 
           {/* ── Meazure Exam Platform ── */}
           <Route path="/meazure-create-user" element={<MeazureCreateUser />} />

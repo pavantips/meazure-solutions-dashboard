@@ -260,3 +260,79 @@ def test_all_user_events_use_api_base():
 def test_tc_base_uses_v2():
     assert "/v2" in TC_BASE
     assert "/v2" in TC_GO_BASE
+
+
+# ── Report endpoints (form-encoded POST to api.proctoru.com) ──
+
+@responses.activate
+def test_bluebird_client_activity_uses_api_base():
+    """bluebirdclientActivityReport must POST to api.proctoru.com, not go.proctoru.com."""
+    url = f"{API_BASE}/bluebirdclientActivityReport/"
+    responses.add(responses.POST, url, json={"response_code": 1}, status=200)
+    result = post_form(url, {"student_id": "365", "start_date": "2017-11-29",
+                             "end_date": "2020-11-30", "time_sent": "2026-01-01T00:00:00Z"})
+    assert result["success"] is True
+    assert "api.proctoru.com" in responses.calls[0].request.url
+
+@responses.activate
+def test_bluebird_client_activity_form_encoded():
+    """bluebirdclientActivityReport must use application/x-www-form-urlencoded."""
+    url = f"{API_BASE}/bluebirdclientActivityReport/"
+    responses.add(responses.POST, url, json={}, status=200)
+    post_form(url, {"student_id": "365", "start_date": "2017-11-29", "end_date": "2020-11-30"})
+    assert "x-www-form-urlencoded" in responses.calls[0].request.headers["Content-Type"]
+
+@responses.activate
+def test_client_activity_report_uses_api_base():
+    """clientActivityReport must POST to api.proctoru.com."""
+    url = f"{API_BASE}/clientActivityReport/"
+    responses.add(responses.POST, url, json={"response_code": 1}, status=200)
+    result = post_form(url, {"student_id": "365", "start_date": "2018-08-30",
+                             "end_date": "2018-08-30", "time_sent": "2026-01-01T00:00:00Z"})
+    assert result["success"] is True
+    assert "api.proctoru.com" in responses.calls[0].request.url
+
+@responses.activate
+def test_client_activity_report_form_encoded():
+    url = f"{API_BASE}/clientActivityReport/"
+    responses.add(responses.POST, url, json={}, status=200)
+    post_form(url, {"student_id": "365", "start_date": "2018-08-30", "end_date": "2018-08-30"})
+    assert "x-www-form-urlencoded" in responses.calls[0].request.headers["Content-Type"]
+
+@responses.activate
+def test_pending_exam_report_uses_api_base():
+    """pendingExamReport must POST to api.proctoru.com."""
+    url = f"{API_BASE}/pendingExamReport/"
+    responses.add(responses.POST, url, json={"response_code": 1}, status=200)
+    result = post_form(url, {"student_id": "365", "start_date": "2014-08-29",
+                             "end_date": "2021-08-29", "time_sent": "2026-01-01T00:00:00Z"})
+    assert result["success"] is True
+    assert "api.proctoru.com" in responses.calls[0].request.url
+
+@responses.activate
+def test_pending_exam_report_form_encoded():
+    url = f"{API_BASE}/pendingExamReport/"
+    responses.add(responses.POST, url, json={}, status=200)
+    post_form(url, {"student_id": "365", "start_date": "2014-08-29", "end_date": "2021-08-29"})
+    assert "x-www-form-urlencoded" in responses.calls[0].request.headers["Content-Type"]
+
+@responses.activate
+def test_report_sends_auth_header():
+    """All 3 report endpoints must include Authorization-Token header."""
+    for endpoint in ["bluebirdclientActivityReport", "clientActivityReport", "pendingExamReport"]:
+        url = f"{API_BASE}/{endpoint}/"
+        responses.add(responses.POST, url, json={}, status=200)
+        post_form(url, {"student_id": "365"})
+    for call in responses.calls:
+        assert call.request.headers["Authorization-Token"] == FAKE_TOKEN
+
+@responses.activate
+def test_report_skips_empty_params():
+    """Reports must not forward empty/None params in form body."""
+    url = f"{API_BASE}/clientActivityReport/"
+    responses.add(responses.POST, url, json={}, status=200)
+    post_form(url, {"student_id": "365", "start_date": "", "end_date": None})
+    body = responses.calls[0].request.body
+    assert "student_id=365" in body
+    assert "start_date" not in body
+    assert "end_date" not in body

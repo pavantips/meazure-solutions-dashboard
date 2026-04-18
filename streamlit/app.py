@@ -89,6 +89,9 @@ PAGES = {
     "Get Reservations":           ("GET",  None),
     "Cancel Reservation":         ("POST", None),
     "── Reports ──":              None,
+    "Bluebird Client Activity":  ("POST", None),
+    "Client Activity Report":    ("POST", None),
+    "Pending Exam Report":       ("POST", None),
     "── LTI ──":                  None,
     "Canvas":                     ("LTI", None),
     "Moodle":                     ("LTI", None),
@@ -541,6 +544,78 @@ def page_cancel_reservation():
     show_response(st.session_state.get("last_result"))
 
 
+def page_bluebird_client_activity():
+    st.markdown("**`POST`** `api.proctoru.com/api/bluebirdclientActivityReport/`")
+    st.title("Bluebird Client Activity Report")
+    st.caption("Returns Bluebird exam activity for a student within a date range.")
+    sid = get_ctx("student_id")
+    if sid:
+        st.info(f"💡 Using **student_id `{sid}`** from session.")
+    with st.form("bluebird_activity"):
+        c1, c2 = st.columns(2)
+        student_id = c1.text_input("student_id", value=sid or "365", placeholder="Run Create User first")
+        c2.markdown("")  # spacer
+        c3, c4 = st.columns(2)
+        start_date = c3.text_input("start_date", value="2017-11-29")
+        end_date   = c4.text_input("end_date",   value="2020-11-30")
+        submitted  = st.form_submit_button("📊 Run Report", use_container_width=True)
+    if submitted:
+        body = dict(student_id=student_id, start_date=start_date,
+                    end_date=end_date, time_sent=now_iso())
+        with st.spinner("Running report..."):
+            result = post_form(f"{API_BASE}/bluebirdclientActivityReport/", body)
+        st.session_state["last_result"] = result
+    show_response(st.session_state.get("last_result"))
+
+
+def page_client_activity_report():
+    st.markdown("**`POST`** `api.proctoru.com/api/clientActivityReport/`")
+    st.title("Client Activity Report")
+    st.caption("Returns overall exam session activity for a student within a date range.")
+    sid = get_ctx("student_id")
+    if sid:
+        st.info(f"💡 Using **student_id `{sid}`** from session.")
+    with st.form("client_activity"):
+        c1, c2 = st.columns(2)
+        student_id = c1.text_input("student_id", value=sid or "365", placeholder="Run Create User first")
+        c2.markdown("")  # spacer
+        c3, c4 = st.columns(2)
+        start_date = c3.text_input("start_date", value="2018-08-30")
+        end_date   = c4.text_input("end_date",   value="2018-08-30")
+        submitted  = st.form_submit_button("📊 Run Report", use_container_width=True)
+    if submitted:
+        body = dict(student_id=student_id, start_date=start_date,
+                    end_date=end_date, time_sent=now_iso())
+        with st.spinner("Running report..."):
+            result = post_form(f"{API_BASE}/clientActivityReport/", body)
+        st.session_state["last_result"] = result
+    show_response(st.session_state.get("last_result"))
+
+
+def page_pending_exam_report():
+    st.markdown("**`POST`** `api.proctoru.com/api/pendingExamReport/`")
+    st.title("Pending Exam Report")
+    st.caption("Returns exams that are pending scheduling or completion for a student.")
+    sid = get_ctx("student_id")
+    if sid:
+        st.info(f"💡 Using **student_id `{sid}`** from session.")
+    with st.form("pending_exam"):
+        c1, c2 = st.columns(2)
+        student_id = c1.text_input("student_id", value=sid or "365", placeholder="Run Create User first")
+        c2.markdown("")  # spacer
+        c3, c4 = st.columns(2)
+        start_date = c3.text_input("start_date", value="2014-08-29")
+        end_date   = c4.text_input("end_date",   value="2021-08-29")
+        submitted  = st.form_submit_button("📊 Run Report", use_container_width=True)
+    if submitted:
+        body = dict(student_id=student_id, start_date=start_date,
+                    end_date=end_date, time_sent=now_iso())
+        with st.spinner("Running report..."):
+            result = post_form(f"{API_BASE}/pendingExamReport/", body)
+        st.session_state["last_result"] = result
+    show_response(st.session_state.get("last_result"))
+
+
 def page_canvas():
     st.title("Canvas LTI")
     st.caption("Opens the ProctorU Canvas LMS integration environment.")
@@ -904,9 +979,12 @@ PAGE_MAP = {
     "Get Exams":              page_get_exams,
     "Get Availability":       page_get_availability,
     "Begin Reservation":      page_begin_reservation,
-    "Get Reservations":       page_get_reservations,
-    "Cancel Reservation":     page_cancel_reservation,
-    "Canvas":                 page_canvas,
+    "Get Reservations":          page_get_reservations,
+    "Cancel Reservation":        page_cancel_reservation,
+    "Bluebird Client Activity":  page_bluebird_client_activity,
+    "Client Activity Report":    page_client_activity_report,
+    "Pending Exam Report":       page_pending_exam_report,
+    "Canvas":                    page_canvas,
     "Moodle":                 page_moodle,
     "D2L Brightspace":        page_d2l,
     "Meazure: Create User":   page_meazure_create_user,
