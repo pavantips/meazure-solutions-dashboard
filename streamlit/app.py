@@ -92,6 +92,7 @@ PAGES = {
     "── LTI ──":                  None,
     "Canvas":                     ("LTI", None),
     "Moodle":                     ("LTI", None),
+    "D2L Brightspace":            ("LTI", None),
     "── Meazure Exam Platform ──":None,
     "Meazure: Create User":       ("POST", None),
     "── Test Center API ──":      None,
@@ -564,6 +565,18 @@ def page_moodle():
     """, unsafe_allow_html=True)
 
 
+def page_d2l():
+    st.title("D2L Brightspace LTI")
+    st.caption("Opens the ProctorU D2L Brightspace demo environment.")
+    st.markdown("""
+    <a href="https://proctoru.brightspacedemo.com" target="_blank"
+       style="display:inline-block;padding:10px 20px;background:#e3001b;color:white;
+              border-radius:7px;font-weight:700;text-decoration:none;font-size:14px;">
+      ↗ Open D2L Brightspace
+    </a>
+    """, unsafe_allow_html=True)
+
+
 def page_meazure_create_user():
     st.markdown("**`POST`** `api.ysasecure.com/v2/users`")
     st.title("Create User — Meazure")
@@ -895,6 +908,7 @@ PAGE_MAP = {
     "Cancel Reservation":     page_cancel_reservation,
     "Canvas":                 page_canvas,
     "Moodle":                 page_moodle,
+    "D2L Brightspace":        page_d2l,
     "Meazure: Create User":   page_meazure_create_user,
     "TC: Get Institution":    page_tc_get_institution,
     "TC: Get Exams":          page_tc_get_exams,

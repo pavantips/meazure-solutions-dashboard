@@ -22,8 +22,9 @@ const reports = [
 ];
 
 const ltiLinks = [
-  { label: 'Canvas', url: 'https://proctoru.instructure.com',                          color: '#e8320a' },
-  { label: 'Moodle', url: 'https://staging-moodle-4-5-5.proctoru.com/login/index.php', color: '#f98012' },
+  { label: 'Canvas',         url: 'https://proctoru.instructure.com',                          color: '#e8320a' },
+  { label: 'Moodle',         url: 'https://staging-moodle-4-5-5.proctoru.com/login/index.php', color: '#f98012' },
+  { label: 'D2L Brightspace',url: 'https://proctoru.brightspacedemo.com',                      color: '#e3001b' },
 ];
 
 const meazureEvents = [
