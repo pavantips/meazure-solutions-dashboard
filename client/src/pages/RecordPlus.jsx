@@ -54,14 +54,14 @@ export default function RecordPlus() {
             <div style={sectionCard}>
               <div style={sectionLabel}>Student</div>
               <div style={grid2}>
-                <F label="First Name"   value={form.first_name} onChange={v => set('first_name', v)} />
-                <F label="Last Name"    value={form.last_name}  onChange={v => set('last_name', v)} />
-                <F label="Student ID"   value={form.student_id} onChange={v => set('student_id', v)} />
-                <F label="User ID"      value={form.user_id}    onChange={v => set('user_id', v)} />
-                <F label="Email"        value={form.email}      onChange={v => set('email', v)} type="email" span={2} />
-                <F label="Country"      value={form.country}    onChange={v => set('country', v)} maxLength={2} />
-                <F label="Phone"        value={form.phone1}     onChange={v => set('phone1', v)} />
-                <div style={{ gridColumn: 'span 2' }}>
+                <F label="First Name"    value={form.first_name}    onChange={v => set('first_name', v)} />
+                <F label="Last Name"     value={form.last_name}     onChange={v => set('last_name', v)} />
+                <F label="Student ID"    value={form.student_id}    onChange={v => set('student_id', v)} />
+                <F label="Email"         value={form.email}         onChange={v => set('email', v)} type="email" />
+                <F label="Phone"         value={form.phone1}        onChange={v => set('phone1', v)} />
+                <F label="Password"      value={form.user_password} onChange={v => set('user_password', v)} />
+                <F label="Country (2-letter)" value={form.country}  onChange={v => set('country', v)} maxLength={2} />
+                <div style={{ gridColumn: 'span 1' }}>
                   <label style={labelStyle}>Time Zone</label>
                   <select value={form.time_zone_id} onChange={e => set('time_zone_id', e.target.value)} style={inputStyle}>
                     {TIMEZONES.map(tz => <option key={tz}>{tz}</option>)}
@@ -70,22 +70,31 @@ export default function RecordPlus() {
               </div>
             </div>
 
+            {/* Address (optional) */}
+            <div style={sectionCard}>
+              <div style={sectionLabel}>Address <span style={{ fontWeight: 400, color: '#9ca3af' }}>(optional)</span></div>
+              <div style={grid2}>
+                <F label="Address1" value={form.Address1} onChange={v => set('Address1', v)} span={2} />
+                <F label="City"     value={form.City}     onChange={v => set('City', v)} />
+                <F label="State"    value={form.State}    onChange={v => set('State', v)} />
+                <F label="ZipCode"  value={form.ZipCode}  onChange={v => set('ZipCode', v)} />
+              </div>
+            </div>
+
             {/* Exam */}
             <div style={sectionCard}>
               <div style={sectionLabel}>Exam</div>
               <div style={grid2}>
-                <F label="Exam ID"       value={form.exam_id}     onChange={v => set('exam_id', v)} />
-                <F label="Duration (min)"value={form.duration}    onChange={v => set('duration', v)} type="number" />
+                <F label="Exam ID"        value={form.exam_id}     onChange={v => set('exam_id', v)} />
+                <F label="Duration (min)" value={form.duration}    onChange={v => set('duration', v)} type="number" />
                 <F label="Description (Exam Name)" value={form.description} onChange={v => set('description', v)} span={2} />
-                <F label="Exam URL"      value={form.exam_url}    onChange={v => set('exam_url', v)} type="url" span={2} />
+                <F label="Exam URL"       value={form.exam_url}    onChange={v => set('exam_url', v)} type="url" span={2} />
                 <div>
                   <label style={labelStyle}>Preset</label>
                   <select value={form.preset} onChange={e => set('preset', e.target.value)} style={inputStyle}>
                     {PRESETS.map(p => <option key={p}>{p}</option>)}
                   </select>
                 </div>
-                <F label="Permitted Resources" value={form.permitted_resources_list} onChange={v => set('permitted_resources_list', v)} />
-                <F label="Other Resources"     value={form.other_resources}          onChange={v => set('other_resources', v)} span={2} />
               </div>
             </div>
 

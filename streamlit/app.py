@@ -334,35 +334,41 @@ def page_record_plus():
     st.markdown("**`POST`** `api.proctoru.com/api/exams/add_record_plus_exams`")
     st.title("Record+")
     st.caption("Creates a Record+ automated proctoring exam. Saves reservation_uuid to session for Fulfill step.")
-    fn, ln = rand_name(); tag = random.randint(10000, 99999)
+    fn, ln = rand_name(); tag = random.randint(1000, 9999)
     with st.form("record_plus"):
+        st.markdown("**Student**")
         c1, c2 = st.columns(2)
-        first_name  = c1.text_input("first_name",   value=fn)
-        last_name   = c2.text_input("last_name",    value=ln)
+        first_name    = c1.text_input("first_name",    value=fn)
+        last_name     = c2.text_input("last_name",     value=ln)
         c3, c4 = st.columns(2)
-        student_id  = c3.text_input("student_id",   value=get_ctx("student_id") or rand_id())
-        user_id     = c4.text_input("user_id",       value=rand_id())
-        email       = st.text_input("email",          value=rand_email(fn, ln))
+        student_id    = c3.text_input("student_id",    value=get_ctx("student_id") or rand_id())
+        email         = c4.text_input("email",         value=rand_email(fn, ln))
         c5, c6 = st.columns(2)
-        country     = c5.text_input("country",       value="US", max_chars=2)
-        phone       = c6.text_input("phone1",         value=f"312555{str(tag)[:4]}")
-        tz          = st.selectbox("time_zone_id",   TIMEZONES)
-        description = st.text_input("description (Exam Name)", value=random.choice(EXAM_NAMES))
+        phone         = c5.text_input("phone1",        value=f"312555{str(tag)[:4]}")
+        user_password = c6.text_input("user_password", value=f"Pass{tag}!")
         c7, c8 = st.columns(2)
-        exam_id     = c7.text_input("exam_id",       value=rand_exam_id())
-        duration    = c8.number_input("duration (min)", value=60, step=15)
-        exam_url    = st.text_input("exam_url",      value="https://canvas.instructure.com/exam")
+        country       = c7.text_input("country",       value="US", max_chars=2)
+        tz            = c8.selectbox("time_zone_id",   TIMEZONES)
+        st.markdown("**Address** *(optional)*")
+        address1      = st.text_input("Address1",      value="", placeholder="Street address (optional)")
         c9, c10 = st.columns(2)
-        preset      = c9.selectbox("preset",         ["medium", "low", "high"])
-        perm_res    = c10.text_input("permitted_resources_list", value="")
-        other_res   = st.text_input("other_resources", value="")
-        submitted   = st.form_submit_button("⚡ Send Request", use_container_width=True)
+        city          = c9.text_input("City",          value="", placeholder="Optional")
+        state         = c10.text_input("State",        value="", placeholder="Optional")
+        zipcode       = st.text_input("ZipCode",       value="", placeholder="Optional")
+        st.markdown("**Exam**")
+        c11, c12 = st.columns(2)
+        exam_id       = c11.text_input("exam_id",      value=rand_exam_id())
+        duration      = c12.number_input("duration (min)", value=90, step=15)
+        description   = st.text_input("description (Exam Name)", value=random.choice(EXAM_NAMES))
+        exam_url      = st.text_input("exam_url",      value="https://canvas.instructure.com/exam")
+        preset        = st.selectbox("preset",         ["high", "medium", "low"])
+        submitted     = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
-        body = dict(student_id=student_id, user_id=user_id, first_name=first_name,
-                    last_name=last_name, email=email, country=country, phone1=phone,
-                    time_zone_id=tz, description=description, duration=str(duration),
-                    exam_id=exam_id, exam_url=exam_url, permitted_resources_list=perm_res,
-                    other_resources=other_res, preset=preset)
+        body = dict(student_id=student_id, first_name=first_name, last_name=last_name,
+                    email=email, Address1=address1, City=city, ZipCode=zipcode, State=state,
+                    country=country, phone1=phone, user_password=user_password,
+                    time_zone_id=tz, exam_id=exam_id, description=description,
+                    exam_url=exam_url, duration=str(duration), preset=preset)
         with st.spinner("Calling API..."):
             result = post_json(f"{API_BASE}/exams/add_record_plus_exams", body)
         extract_and_save(result, student_id=student_id, exam_id=exam_id)

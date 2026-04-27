@@ -104,21 +104,24 @@ export function randomRecordPlus() {
   const first = pick(FIRST_NAMES);
   const last  = pick(LAST_NAMES);
   const id    = `STU${randNum(6)}`;
+  const tag   = randInt(1000, 9999);
   return {
-    student_id:              id,
-    user_id:                 id,
-    first_name:              first,
-    last_name:               last,
-    email:                   makeEmail(first, last),
-    country:                 pick(['US','CA','NZ','AU','GB','IN']),
-    phone1:                  `${randInt(200,999)}${randInt(100,999)}${randInt(1000,9999)}`,
-    time_zone_id:            pick(TIMEZONES),
-    description:             pick(EXAM_NAMES),
-    duration:                String(pick([30, 60, 90, 120])),
-    exam_id:                 String(randInt(1000, 9999)),
-    exam_url:                'https://www.examurl.com',
-    permitted_resources_list:'bathroom_breaks, approved_website',
-    other_resources:         pick(['All food and drinks allowed.','Calculator permitted.','No resources allowed.','']),
-    preset:                  pick(PRESETS),
+    student_id:   id,
+    first_name:   first,
+    last_name:    last,
+    email:        makeEmail(first, last),
+    Address1:     '',
+    City:         '',
+    ZipCode:      '',
+    State:        '',
+    country:      pick(['US','CA','NZ','AU','GB','IN']),
+    phone1:       `${randInt(200,999)}${randInt(100,999)}${randInt(1000,9999)}`,
+    user_password:`Pass${tag}!`,
+    time_zone_id: pick(TIMEZONES),
+    exam_id:      String(randInt(1000, 9999)),
+    description:  pick(EXAM_NAMES),
+    exam_url:     'https://www.examurl.com',
+    duration:     String(pick([30, 60, 90, 120])),
+    preset:       pick(PRESETS),
   };
 }
