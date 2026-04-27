@@ -123,6 +123,6 @@ export function randomRecordPlus() {
     exam_url:      'https://www.examurl.com',
     duration:      String(pick([30, 60, 90, 120])),
     preset:        pick(PRESETS),
-    exam_password: `EP${randNum(8)}`,
+    exam_password: 'password',
   };
 }

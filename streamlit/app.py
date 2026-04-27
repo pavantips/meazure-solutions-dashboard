@@ -363,7 +363,7 @@ def page_record_plus():
         exam_url      = st.text_input("exam_url",      value="https://canvas.instructure.com/exam")
         c13, c14 = st.columns(2)
         preset        = c13.selectbox("preset",        ["high", "medium", "low"])
-        exam_password = c14.text_input("exam_password", value=f"EP{random.randint(10000000, 99999999)}")
+        exam_password = c14.text_input("exam_password", value="password")
         submitted     = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
         body = dict(student_id=student_id, first_name=first_name, last_name=last_name,
