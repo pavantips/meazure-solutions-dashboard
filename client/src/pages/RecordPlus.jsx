@@ -95,6 +95,7 @@ export default function RecordPlus() {
                     {PRESETS.map(p => <option key={p}>{p}</option>)}
                   </select>
                 </div>
+                <F label="Exam Password" value={form.exam_password} onChange={v => set('exam_password', v)} />
               </div>
             </div>
 

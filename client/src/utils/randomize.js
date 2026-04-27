@@ -118,10 +118,11 @@ export function randomRecordPlus() {
     phone1:       `${randInt(200,999)}${randInt(100,999)}${randInt(1000,9999)}`,
     user_password:`Pass${tag}!`,
     time_zone_id: pick(TIMEZONES),
-    exam_id:      String(randInt(1000, 9999)),
-    description:  pick(EXAM_NAMES),
-    exam_url:     'https://www.examurl.com',
-    duration:     String(pick([30, 60, 90, 120])),
-    preset:       pick(PRESETS),
+    exam_id:       String(randInt(1000, 9999)),
+    description:   pick(EXAM_NAMES),
+    exam_url:      'https://www.examurl.com',
+    duration:      String(pick([30, 60, 90, 120])),
+    preset:        pick(PRESETS),
+    exam_password: `EP${randNum(8)}`,
   };
 }

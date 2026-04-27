@@ -361,14 +361,17 @@ def page_record_plus():
         duration      = c12.number_input("duration (min)", value=90, step=15)
         description   = st.text_input("description (Exam Name)", value=random.choice(EXAM_NAMES))
         exam_url      = st.text_input("exam_url",      value="https://canvas.instructure.com/exam")
-        preset        = st.selectbox("preset",         ["high", "medium", "low"])
+        c13, c14 = st.columns(2)
+        preset        = c13.selectbox("preset",        ["high", "medium", "low"])
+        exam_password = c14.text_input("exam_password", value=f"EP{random.randint(10000000, 99999999)}")
         submitted     = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
         body = dict(student_id=student_id, first_name=first_name, last_name=last_name,
                     email=email, Address1=address1, City=city, ZipCode=zipcode, State=state,
                     country=country, phone1=phone, user_password=user_password,
                     time_zone_id=tz, exam_id=exam_id, description=description,
-                    exam_url=exam_url, duration=str(duration), preset=preset)
+                    exam_url=exam_url, duration=str(duration), preset=preset,
+                    exam_password=exam_password)
         with st.spinner("Calling API..."):
             result = post_json(f"{API_BASE}/exams/add_record_plus_exams", body)
         extract_and_save(result, student_id=student_id, exam_id=exam_id)
