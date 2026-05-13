@@ -143,7 +143,9 @@ def show_response(result):
     if not result:
         return
     # Launch button — shown above tabs when data.data.url is present
-    launch_url = result.get("data", {}).get("data", {}).get("url")
+    _data  = result.get("data")
+    _inner = _data.get("data") if isinstance(_data, dict) else None
+    launch_url = _inner.get("url") if isinstance(_inner, dict) else None
     if launch_url:
         st.markdown(
             f"""<a href="{launch_url}" target="_blank"
@@ -164,7 +166,7 @@ def show_response(result):
         else:
             st.error(f"❌ {status} Error")
             # Show the API message prominently when the call failed
-            api_msg = result.get("data", {}).get("message", "")
+            api_msg = _data.get("message", "") if isinstance(_data, dict) else ""
             if api_msg:
                 st.warning(f"**API says:** {api_msg}")
         st.json(result.get("data", {}))
