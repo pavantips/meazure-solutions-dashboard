@@ -28,13 +28,23 @@ function handleError(res, err, meta) {
   res.status(status).json({ success: false, status, data, _request: meta });
 }
 
+// ProctorU returns HTTP 200 with response_code !== 1 for business-level errors.
+// TC API endpoints don't use response_code — treat its absence as success.
+function isApiSuccess(data) {
+  if (data && typeof data.response_code !== 'undefined') {
+    return data.response_code === 1;
+  }
+  return true;
+}
+
 // JSON POST (e.g. addBlueBirdExam, editTermExam)
 async function forwardPost(res, url, body) {
   const meta = { url, method: 'POST', contentType: 'application/json', body };
   console.log(`[Proxy] POST (json) ${url}`);
   try {
     const response = await axios.post(url, body, { headers: authHeaders() });
-    res.status(response.status).json({ success: true, status: response.status, data: response.data, _request: meta });
+    const success = isApiSuccess(response.data);
+    res.status(response.status).json({ success, status: response.status, data: response.data, _request: meta });
   } catch (err) { handleError(res, err, meta); }
 }
 
@@ -50,7 +60,8 @@ async function forwardForm(res, url, body) {
     const response = await axios.post(url, params, {
       headers: authHeaders('application/x-www-form-urlencoded'),
     });
-    res.status(response.status).json({ success: true, status: response.status, data: response.data, _request: meta });
+    const success = isApiSuccess(response.data);
+    res.status(response.status).json({ success, status: response.status, data: response.data, _request: meta });
   } catch (err) { handleError(res, err, meta); }
 }
 
@@ -60,7 +71,8 @@ async function forwardGet(res, url, params) {
   console.log(`[Proxy] GET ${url}`, params);
   try {
     const response = await axios.get(url, { headers: authHeaders(), params });
-    res.status(response.status).json({ success: true, status: response.status, data: response.data, _request: meta });
+    const success = isApiSuccess(response.data);
+    res.status(response.status).json({ success, status: response.status, data: response.data, _request: meta });
   } catch (err) { handleError(res, err, meta); }
 }
 
@@ -70,7 +82,8 @@ async function forwardPostWithQuery(res, url, queryParams, body) {
   console.log(`[Proxy] POST+query ${url}`, queryParams);
   try {
     const response = await axios.post(url, body, { headers: authHeaders(), params: queryParams });
-    res.status(response.status).json({ success: true, status: response.status, data: response.data, _request: meta });
+    const success = isApiSuccess(response.data);
+    res.status(response.status).json({ success, status: response.status, data: response.data, _request: meta });
   } catch (err) { handleError(res, err, meta); }
 }
 
@@ -80,7 +93,8 @@ async function forwardDelete(res, url) {
   console.log(`[Proxy] DELETE ${url}`);
   try {
     const response = await axios.delete(url, { headers: authHeaders() });
-    res.status(response.status).json({ success: true, status: response.status, data: response.data, _request: meta });
+    const success = isApiSuccess(response.data);
+    res.status(response.status).json({ success, status: response.status, data: response.data, _request: meta });
   } catch (err) { handleError(res, err, meta); }
 }
 
@@ -90,7 +104,8 @@ async function forwardPostExternal(res, url, body) {
   console.log(`[Proxy] POST (external/no-auth-header) ${url}`);
   try {
     const response = await axios.post(url, body, { headers: { 'Content-Type': 'application/json' } });
-    res.status(response.status).json({ success: true, status: response.status, data: response.data, _request: meta });
+    const success = isApiSuccess(response.data);
+    res.status(response.status).json({ success, status: response.status, data: response.data, _request: meta });
   } catch (err) { handleError(res, err, meta); }
 }
 

@@ -77,6 +77,29 @@ def test_wrap_failure():
     assert result["success"] is False
     assert result["status"] == 401
 
+def test_wrap_business_error_response_code_2():
+    """HTTP 200 with response_code=2 must be treated as failure (e.g. 'no available slots')."""
+    mock_resp = MagicMock()
+    mock_resp.ok = True
+    mock_resp.status_code = 200
+    mock_resp.json.return_value = {
+        "response_code": 2,
+        "message": "no available slots : Error count 0 of 50",
+        "data": {},
+    }
+    result = _wrap(mock_resp, {})
+    assert result["success"] is False, "response_code=2 must set success=False even on HTTP 200"
+    assert result["status"] == 200
+
+def test_wrap_no_response_code_treated_as_success():
+    """TC API responses have no response_code — absence should not fail the call."""
+    mock_resp = MagicMock()
+    mock_resp.ok = True
+    mock_resp.status_code = 200
+    mock_resp.json.return_value = {"institution": {"uuid": "abc-123"}}
+    result = _wrap(mock_resp, {})
+    assert result["success"] is True
+
 def test_wrap_non_json_response():
     mock_resp = MagicMock()
     mock_resp.ok = True

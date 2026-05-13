@@ -60,6 +60,7 @@ export default function ResponseViewer({ result, loading }) {
   }
 
   const { success, status, data, _request } = result;
+  const apiMessage = (!success && data?.message) ? data.message : null;
   const launchUrl  = data?.data?.url ?? null;
   const otherUrls  = extractUrls(data).filter(({ url }) => url !== launchUrl);
   const activeJson = tab === 'response' ? JSON.stringify(data, null, 2) : JSON.stringify(_request, null, 2);
@@ -94,7 +95,15 @@ export default function ResponseViewer({ result, loading }) {
         </div>
       )}
 
-      {/* 🚀 Primary Launch button — data.data.url */}
+      {/* API error message banner */}
+      {apiMessage && (
+        <div style={{ padding:'10px 16px', borderBottom:'1px solid #1e293b', display:'flex', alignItems:'flex-start', gap:'10px', background:'#1c0a0a' }}>
+          <span style={{ fontSize:'14px', flexShrink:0 }}>⚠️</span>
+          <span style={{ fontSize:'12px', color:'#fca5a5', lineHeight:'1.5' }}><strong style={{ color:'#f87171' }}>API Error: </strong>{apiMessage}</span>
+        </div>
+      )}
+
+      {/* Launch button — data.data.url */}
       {tab === 'response' && launchUrl && (
         <div style={{ padding:'12px 16px', borderBottom:'1px solid #1e293b', display:'flex', alignItems:'center', gap:'12px' }}>
           <a href={launchUrl} target="_blank" rel="noopener noreferrer"

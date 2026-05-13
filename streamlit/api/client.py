@@ -34,7 +34,12 @@ def _wrap(resp: requests.Response, meta: dict) -> dict:
         data = resp.json()
     except Exception:
         data = {"raw": resp.text}
-    return {"success": resp.ok, "status": resp.status_code, "data": data, "_request": meta}
+    # ProctorU returns HTTP 200 with response_code != 1 for business-level errors.
+    # TC API endpoints don't use response_code — treat its absence as success.
+    rc = data.get("response_code") if isinstance(data, dict) else None
+    api_ok = (rc == 1) if rc is not None else True
+    success = resp.ok and api_ok
+    return {"success": success, "status": resp.status_code, "data": data, "_request": meta}
 
 
 def _err(e: Exception, meta: dict) -> dict:

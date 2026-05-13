@@ -163,6 +163,10 @@ def show_response(result):
             st.success(f"✅ {status} OK")
         else:
             st.error(f"❌ {status} Error")
+            # Show the API message prominently when the call failed
+            api_msg = result.get("data", {}).get("message", "")
+            if api_msg:
+                st.warning(f"**API says:** {api_msg}")
         st.json(result.get("data", {}))
     with tab2:
         req = result.get("_request", {})
