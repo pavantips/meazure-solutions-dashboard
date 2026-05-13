@@ -101,7 +101,7 @@ export default function ResponseViewer({ result, loading }) {
             style={{ display:'inline-flex', alignItems:'center', gap:'7px', padding:'8px 20px', background:'#14532d', color:'#4ade80', borderRadius:'8px', fontSize:'13px', fontWeight:'700', textDecoration:'none', border:'1px solid #166534', transition:'background 0.15s', letterSpacing:'0.02em' }}
             onMouseEnter={e => e.currentTarget.style.background='#166534'}
             onMouseLeave={e => e.currentTarget.style.background='#14532d'}
-          >🚀 Launch</a>
+          >Launch</a>
           <code style={{ fontSize:'11px', color:'#4b5563', wordBreak:'break-all', flex:1 }}>{launchUrl}</code>
         </div>
       )}

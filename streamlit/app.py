@@ -151,7 +151,7 @@ def show_response(result):
                        background:#14532d;color:#4ade80;border-radius:8px;font-size:14px;
                        font-weight:700;text-decoration:none;border:1px solid #166534;
                        margin-bottom:10px;">
-              🚀 Launch
+              Launch
             </a>
             <span style="font-size:11px;color:#6b7280;margin-left:8px;font-family:monospace;">{launch_url[:80]}{"…" if len(launch_url) > 80 else ""}</span>""",
             unsafe_allow_html=True,
