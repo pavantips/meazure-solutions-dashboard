@@ -142,6 +142,20 @@ def new_uuid():       return str(uuid.uuid4())
 def show_response(result):
     if not result:
         return
+    # Launch button — shown above tabs when data.data.url is present
+    launch_url = result.get("data", {}).get("data", {}).get("url")
+    if launch_url:
+        st.markdown(
+            f"""<a href="{launch_url}" target="_blank"
+                style="display:inline-flex;align-items:center;gap:8px;padding:9px 22px;
+                       background:#14532d;color:#4ade80;border-radius:8px;font-size:14px;
+                       font-weight:700;text-decoration:none;border:1px solid #166534;
+                       margin-bottom:10px;">
+              🚀 Launch
+            </a>
+            <span style="font-size:11px;color:#6b7280;margin-left:8px;font-family:monospace;">{launch_url[:80]}{"…" if len(launch_url) > 80 else ""}</span>""",
+            unsafe_allow_html=True,
+        )
     tab1, tab2 = st.tabs(["📨 Response", "📤 Request Details"])
     with tab1:
         status, ok = result.get("status", 0), result.get("success", False)
@@ -241,7 +255,7 @@ def page_add_bluebird():
         c5, c6 = st.columns(2)
         duration    = c5.number_input("duration (min)", value=60, step=15)
         tz          = c6.selectbox("time_zone_id",  TIMEZONES)
-        exam_url    = st.text_input("exam_url",     value="https://canvas.instructure.com/exam")
+        exam_url    = st.text_input("exam_url",     value="https://exam-demo.streamlit.app/")
         c7, c8 = st.columns(2)
         active_date = c7.text_input("active_date",  value=(datetime.now(timezone.utc) + timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ"))
         end_date    = c8.text_input("end_date",     value=(datetime.now(timezone.utc) + timedelta(days=8)).strftime("%Y-%m-%dT%H:%M:%SZ"))
@@ -309,7 +323,7 @@ def page_add_adhoc():
         c5, c6 = st.columns(2)
         duration2   = c5.text_input("duration",      value="120")
         dept_id     = c6.text_input("department_id", value="740364540")
-        exam_url    = st.text_input("exam_url",      value="http://proctoru.com")
+        exam_url    = st.text_input("exam_url",      value="https://exam-demo.streamlit.app/")
         exam_pass   = st.text_input("exam_password", value=f"ExP{tag}")
         book_start  = st.text_input("start_date",    value=selected_start)
         c7, c8 = st.columns(2)
@@ -360,7 +374,7 @@ def page_record_plus():
         exam_id       = c11.text_input("exam_id",      value=rand_exam_id())
         duration      = c12.number_input("duration (min)", value=90, step=15)
         description   = st.text_input("description (Exam Name)", value=random.choice(EXAM_NAMES))
-        exam_url      = st.text_input("exam_url",      value="https://canvas.instructure.com/exam")
+        exam_url      = st.text_input("exam_url",      value="https://exam-demo.streamlit.app/")
         c13, c14 = st.columns(2)
         preset        = c13.selectbox("preset",        ["high", "medium", "low"])
         exam_password = c14.text_input("exam_password", value="password")
@@ -439,7 +453,7 @@ def page_create_exam():
         c3, c4 = st.columns(2)
         duration    = c3.number_input("duration (min)", value=60, step=15)
         dept_id     = c4.text_input("department_id", value=str(random.randint(700000000, 799999999)))
-        exam_url    = st.text_input("exam_url",   value="https://canvas.instructure.com/exam")
+        exam_url    = st.text_input("exam_url",   value="https://exam-demo.streamlit.app/")
         submitted   = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
         body = dict(term_id=term_id, exam_id=exam_id, name=name,

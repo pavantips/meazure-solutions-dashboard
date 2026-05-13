@@ -38,7 +38,7 @@ export default function AddAdhoc() {
     reservation_id:'13592',
     reservation_no:'',
     takeitnow:     'Y',
-    exam_url:      'http://proctoru.com',
+    exam_url:      'https://exam-demo.streamlit.app/',
     exam_password: '10f7455adf2d',
     department_id: '740364540',
     url_return:    '',

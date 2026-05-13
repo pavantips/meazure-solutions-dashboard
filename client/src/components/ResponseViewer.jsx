@@ -60,7 +60,8 @@ export default function ResponseViewer({ result, loading }) {
   }
 
   const { success, status, data, _request } = result;
-  const urls       = extractUrls(data);
+  const launchUrl  = data?.data?.url ?? null;
+  const otherUrls  = extractUrls(data).filter(({ url }) => url !== launchUrl);
   const activeJson = tab === 'response' ? JSON.stringify(data, null, 2) : JSON.stringify(_request, null, 2);
 
   function copy() {
@@ -93,11 +94,23 @@ export default function ResponseViewer({ result, loading }) {
         </div>
       )}
 
-      {/* Clickable URL buttons */}
-      {tab === 'response' && urls.length > 0 && (
-        <div style={{ padding:'12px 16px', borderBottom:'1px solid #1e293b', display:'flex', flexWrap:'wrap', gap:'8px' }}>
+      {/* 🚀 Primary Launch button — data.data.url */}
+      {tab === 'response' && launchUrl && (
+        <div style={{ padding:'12px 16px', borderBottom:'1px solid #1e293b', display:'flex', alignItems:'center', gap:'12px' }}>
+          <a href={launchUrl} target="_blank" rel="noopener noreferrer"
+            style={{ display:'inline-flex', alignItems:'center', gap:'7px', padding:'8px 20px', background:'#14532d', color:'#4ade80', borderRadius:'8px', fontSize:'13px', fontWeight:'700', textDecoration:'none', border:'1px solid #166534', transition:'background 0.15s', letterSpacing:'0.02em' }}
+            onMouseEnter={e => e.currentTarget.style.background='#166534'}
+            onMouseLeave={e => e.currentTarget.style.background='#14532d'}
+          >🚀 Launch</a>
+          <code style={{ fontSize:'11px', color:'#4b5563', wordBreak:'break-all', flex:1 }}>{launchUrl}</code>
+        </div>
+      )}
+
+      {/* Other URLs found in response */}
+      {tab === 'response' && otherUrls.length > 0 && (
+        <div style={{ padding:'10px 16px', borderBottom:'1px solid #1e293b', display:'flex', flexWrap:'wrap', gap:'8px' }}>
           <span style={{ fontSize:'11px', color:'#64748b', alignSelf:'center', marginRight:'4px' }}>LINKS IN RESPONSE</span>
-          {urls.map(({ key, url }) => (
+          {otherUrls.map(({ key, url }) => (
             <a key={key} href={url} target="_blank" rel="noopener noreferrer"
               style={{ display:'inline-flex', alignItems:'center', gap:'5px', padding:'5px 12px', background:'#1e3a5f', color:'#60a5fa', borderRadius:'6px', fontSize:'12px', fontWeight:'600', textDecoration:'none', border:'1px solid #2563eb', transition:'background 0.15s' }}
               onMouseEnter={e => e.currentTarget.style.background='#1e40af'}

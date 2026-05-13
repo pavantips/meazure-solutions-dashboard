@@ -26,7 +26,7 @@ const defaultValues = {
   description:  'Demo Exam',
   active_date:  '2025-01-01T00:00:00',
   end_date:     '2026-12-31T00:00:00',
-  exam_url:     'https://postman.proctoru.com/',
+  exam_url:     'https://exam-demo.streamlit.app/',
   exam_password:'testing',
   time_zone_id: 'Central Standard Time',
   course_no:    'c6408aff',
