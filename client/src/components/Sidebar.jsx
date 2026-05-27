@@ -34,6 +34,11 @@ const meazureEvents = [
   { label: 'Create User', path: '/meazure-create-user', method: 'POST' },
 ];
 
+const meazureLinks = [
+  { label: 'Candidate Login', url: 'https://meazurelearning.ysasecure.com', color: '#6366f1' },
+  { label: 'Admin Login',     url: 'https://yardstickadmin.com/en/login',   color: '#0ea5e9' },
+];
+
 const testCenterEvents = [
   { label: 'Get Institution ID', path: '/tc-get-institution',  method: 'GET'  },
   { label: 'Get Exams',          path: '/tc-get-exams',         method: 'GET'  },
@@ -104,7 +109,7 @@ export default function Sidebar() {
           ProctorU
         </div>
         <div style={{ fontSize: '15px', fontWeight: '700', color: '#f1f5f9', lineHeight: 1.3 }}>
-          API Launch Dashboard
+          Customer LMS or CMS application
         </div>
       </div>
 
@@ -135,6 +140,23 @@ export default function Sidebar() {
       <div style={{ height: '1px', background: '#334155', margin: '0 16px 16px', flexShrink: 0 }} />
 
       <Section title="Meazure Exam Platform" items={meazureEvents} />
+
+      {/* Meazure portal links */}
+      <div style={{ padding: '0 8px', marginBottom: '20px' }}>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          {meazureLinks.map(item => (
+            <a key={item.label} href={item.url} target="_blank" rel="noopener noreferrer"
+              style={{ display:'flex', alignItems:'center', gap:'10px', padding:'9px 16px', borderRadius:'8px', textDecoration:'none', fontSize:'13px', color:'#cbd5e1', background:'transparent', transition:'background 0.15s' }}
+              onMouseEnter={e => e.currentTarget.style.background = '#2d3f55'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            >
+              <span style={{ width:'8px', height:'8px', borderRadius:'50%', background: item.color, flexShrink:0 }} />
+              {item.label}
+              <span style={{ marginLeft:'auto', fontSize:'11px', color:'#475569' }}>↗</span>
+            </a>
+          ))}
+        </nav>
+      </div>
 
       {/* Divider */}
       <div style={{ height: '1px', background: '#334155', margin: '0 16px 16px', flexShrink: 0 }} />

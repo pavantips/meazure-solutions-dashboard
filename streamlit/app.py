@@ -11,7 +11,7 @@ from api.client import (
     now_iso, post_json, post_form, get_params, post_with_query, delete_req, post_external,
 )
 
-st.set_page_config(page_title="Meazure API Playground", page_icon="🔬", layout="wide")
+st.set_page_config(page_title="Customer LMS or CMS application", page_icon="🔬", layout="wide")
 
 st.markdown("""
 <style>
@@ -98,6 +98,8 @@ PAGES = {
     "D2L Brightspace":            ("LTI", None),
     "── Meazure Exam Platform ──":None,
     "Meazure: Create User":       ("POST", None),
+    "Candidate Login":            ("LTI",  None),
+    "Admin Login":                ("LTI",  None),
     "── Test Center API ──":      None,
     "TC: Get Institution":        ("GET",  None),
     "TC: Get Exams":              ("GET",  None),
@@ -109,7 +111,7 @@ PAGES = {
 }
 
 with st.sidebar:
-    st.markdown("### 🔬 API Playground")
+    st.markdown("### Customer LMS or CMS application")
     st.markdown("---")
     selection = st.radio(
         "nav", list(PAGES.keys()), label_visibility="collapsed",
@@ -732,6 +734,30 @@ def page_meazure_create_user():
     show_response(st.session_state.get("last_result"))
 
 
+def page_candidate_login():
+    st.title("Candidate Login")
+    st.caption("Opens the Meazure Learning candidate portal.")
+    st.markdown("""
+    <a href="https://meazurelearning.ysasecure.com" target="_blank"
+       style="display:inline-block;padding:10px 20px;background:#6366f1;color:white;
+              border-radius:7px;font-weight:700;text-decoration:none;font-size:14px;">
+      ↗ Open Candidate Login
+    </a>
+    """, unsafe_allow_html=True)
+
+
+def page_admin_login():
+    st.title("Admin Login")
+    st.caption("Opens the Yardstick admin portal.")
+    st.markdown("""
+    <a href="https://yardstickadmin.com/en/login" target="_blank"
+       style="display:inline-block;padding:10px 20px;background:#0ea5e9;color:white;
+              border-radius:7px;font-weight:700;text-decoration:none;font-size:14px;">
+      ↗ Open Admin Login
+    </a>
+    """, unsafe_allow_html=True)
+
+
 def page_tc_get_institution():
     st.markdown("**`GET`** `api.proctoru.com/api/v2/whoami`")
     st.title("TC: Get Institution")
@@ -1017,6 +1043,8 @@ PAGE_MAP = {
     "Moodle":                 page_moodle,
     "D2L Brightspace":        page_d2l,
     "Meazure: Create User":   page_meazure_create_user,
+    "Candidate Login":        page_candidate_login,
+    "Admin Login":            page_admin_login,
     "TC: Get Institution":    page_tc_get_institution,
     "TC: Get Exams":          page_tc_get_exams,
     "TC: Delivery Windows":   page_tc_delivery_windows,
