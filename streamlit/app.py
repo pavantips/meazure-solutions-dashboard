@@ -162,55 +162,150 @@ NAVIGATION = {
 
 # ── Sidebar ───────────────────────────────────────────────────
 PAGES = {
-    "🏠 Home":                    ("HOME", None),
-    "":                           None,
-    "🔧 Proctoru - Admin":        None,
-    "  Create User (Proctoru)":   ("POST", None),
-    "  Add Bluebird":             ("POST", None),
-    "  Fulfill Record+":          ("POST", None),
-    "  Create Exam":              ("POST", None),
-    "  Get Terms":                ("GET",  None),
-    "  Get Departments":          ("GET",  None),
-    "  Get Reservations":         ("GET",  None),
-    "  Cancel Reservation":       ("POST", None),
+    "🏠 Home": ("HOME", None),
+    "  Create User (Proctoru)": ("POST", None),
+    "  Add Bluebird": ("POST", None),
+    "  Fulfill Record+": ("POST", None),
+    "  Create Exam": ("POST", None),
+    "  Get Terms": ("GET", None),
+    "  Get Departments": ("GET", None),
+    "  Get Reservations": ("GET", None),
+    "  Cancel Reservation": ("POST", None),
     "    📊 Bluebird Client Activity": ("POST", None),
-    "    📊 Client Activity Report":   ("POST", None),
-    "    📊 Pending Exam Report":      ("POST", None),
-    "":                           None,
-    "👤 Proctoru - Candidate":    None,
-    "  Add Adhoc":                ("POST", None),
-    "  Record+":                  ("POST", None),
-    "  Auto Login":               ("POST", None),
-    "":                           None,
-    "🏫 LTI LMS Apps":            None,
-    "  Canvas":                   ("LTI", None),
-    "  Moodle":                   ("LTI", None),
-    "  D2L Brightspace":          ("LTI", None),
-    "":                           None,
-    "⚙️ Meazure - Admin":         None,
-    "  Admin Login":              ("LTI", None),
-    "  Create User (Meazure)":    ("POST", None),
-    "":                           None,
-    "📚 Meazure - Candidate":     None,
-    "  Candidate Login":          ("LTI", None),
-    "":                           None,
-    "🏛️ Test Center - Admin":    None,
-    "  Get Institution":          ("GET",  None),
-    "  Get Exams":                ("GET",  None),
-    "  Delivery Windows":         ("GET",  None),
-    "  Test Locations":           ("GET",  None),
-    "  Availability":             ("GET",  None),
-    "  Post Appointment":         ("POST", None),
-    "  Delete Appointment":       ("DEL",  None),
+    "    📊 Client Activity Report": ("POST", None),
+    "    📊 Pending Exam Report": ("POST", None),
+    "  Add Adhoc": ("POST", None),
+    "  Record+": ("POST", None),
+    "  Auto Login": ("POST", None),
+    "  Canvas": ("LTI", None),
+    "  Moodle": ("LTI", None),
+    "  D2L Brightspace": ("LTI", None),
+    "  Admin Login": ("LTI", None),
+    "  Create User (Meazure)": ("POST", None),
+    "  Candidate Login": ("LTI", None),
+    "  Get Institution": ("GET", None),
+    "  Get Exams": ("GET", None),
+    "  Delivery Windows": ("GET", None),
+    "  Test Locations": ("GET", None),
+    "  Availability": ("GET", None),
+    "  Post Appointment": ("POST", None),
+    "  Delete Appointment": ("DEL", None),
 }
 
 with st.sidebar:
     st.markdown("### Customer LMS or CMS application")
     st.markdown("---")
-    selection = st.radio(
-        "nav", list(PAGES.keys()), label_visibility="collapsed",
-        format_func=lambda x: f"  {x}" if x.startswith("──") else x,
-    )
+
+    # Initialize session state for navigation
+    if "_nav_selection" not in st.session_state:
+        st.session_state._nav_selection = "🏠 Home"
+    if "_expanded" not in st.session_state:
+        st.session_state._expanded = {}
+
+    # Home button
+    if st.button("🏠 Home", use_container_width=True, key="nav_home"):
+        st.session_state._nav_selection = "🏠 Home"
+
+    st.markdown("---")
+
+    # Navigation structure
+    nav_items = {
+        "🔧 Proctoru": {
+            "Admin Interface": [
+                ("Create User (Proctoru)", "  Create User (Proctoru)"),
+                ("Add Bluebird", "  Add Bluebird"),
+                ("Fulfill Record+", "  Fulfill Record+"),
+                ("Create Exam", "  Create Exam"),
+                ("Get Terms", "  Get Terms"),
+                ("Get Departments", "  Get Departments"),
+                ("Get Reservations", "  Get Reservations"),
+                ("Cancel Reservation", "  Cancel Reservation"),
+                ("Reports", None, [
+                    ("Bluebird Client Activity", "    📊 Bluebird Client Activity"),
+                    ("Client Activity Report", "    📊 Client Activity Report"),
+                    ("Pending Exam Report", "    📊 Pending Exam Report"),
+                ])
+            ],
+            "Candidate Interface": [
+                ("Add Adhoc", "  Add Adhoc"),
+                ("Record+", "  Record+"),
+                ("Auto Login", "  Auto Login"),
+            ]
+        },
+        "⚙️ Meazure Exam Platform": {
+            "Admin Interface": [
+                ("Admin Login", "  Admin Login"),
+                ("Create User (Meazure)", "  Create User (Meazure)"),
+            ],
+            "Candidate Interface": [
+                ("Candidate Login", "  Candidate Login"),
+            ]
+        },
+        "🏫 LTI LMS Apps": {
+            None: [
+                ("Canvas", "  Canvas"),
+                ("Moodle", "  Moodle"),
+                ("D2L Brightspace", "  D2L Brightspace"),
+            ]
+        },
+        "🏛️ Test Center Apps": {
+            "Admin Interface": [
+                ("Get Institution", "  Get Institution"),
+                ("Get Exams", "  Get Exams"),
+                ("Delivery Windows", "  Delivery Windows"),
+                ("Test Locations", "  Test Locations"),
+                ("Availability", "  Availability"),
+                ("Post Appointment", "  Post Appointment"),
+                ("Delete Appointment", "  Delete Appointment"),
+            ],
+        }
+    }
+
+    # Render expandable navigation
+    for category, subcategories in nav_items.items():
+        is_expanded = st.session_state._expanded.get(category, False)
+
+        if st.button(category, use_container_width=True, key=f"cat_{category}"):
+            st.session_state._expanded[category] = not is_expanded
+            st.rerun()
+
+        if st.session_state._expanded.get(category, False):
+            for subcat, items in subcategories.items():
+                if subcat is None:
+                    # Direct items (for LTI which has no Admin/Candidate split)
+                    for item in items:
+                        if len(item) == 2:
+                            label, page_key = item
+                            if st.button(label, use_container_width=True, key=f"nav_{page_key}"):
+                                st.session_state._nav_selection = page_key
+                else:
+                    # Subcategory (Admin/Candidate)
+                    is_sub_expanded = st.session_state._expanded.get(f"{category}/{subcat}", False)
+                    if st.button(f"  {subcat}", use_container_width=True, key=f"subcat_{category}/{subcat}"):
+                        st.session_state._expanded[f"{category}/{subcat}"] = not is_sub_expanded
+                        st.rerun()
+
+                    if st.session_state._expanded.get(f"{category}/{subcat}", False):
+                        for item in items:
+                            if len(item) == 2:
+                                label, page_key = item
+                                if st.button(label, use_container_width=True, key=f"nav_{page_key}"):
+                                    st.session_state._nav_selection = page_key
+                            elif len(item) == 3:
+                                # Nested group (like Reports)
+                                label, _, subitems = item
+                                is_group_expanded = st.session_state._expanded.get(f"{category}/{subcat}/{label}", False)
+                                if st.button(f"    {label}", use_container_width=True, key=f"group_{category}/{subcat}/{label}"):
+                                    st.session_state._expanded[f"{category}/{subcat}/{label}"] = not is_group_expanded
+                                    st.rerun()
+
+                                if st.session_state._expanded.get(f"{category}/{subcat}/{label}", False):
+                                    for sub_item in subitems:
+                                        sub_label, sub_page_key = sub_item
+                                        if st.button(sub_page_key, use_container_width=True, key=f"nav_{sub_page_key}"):
+                                            st.session_state._nav_selection = sub_page_key
+
+    selection = st.session_state._nav_selection
 
 # Clear last result when navigating
 if st.session_state.get("_page") != selection:
