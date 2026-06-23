@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/SidebarNew';
+import Home from './pages/Home';
 import CreateUser   from './pages/CreateUser';
 import AutoLogin    from './pages/AutoLogin';
 import AddBluebird  from './pages/AddBluebird';
@@ -26,6 +27,11 @@ import TCAvailability     from './pages/TCAvailability';
 import TCPostAppointment  from './pages/TCPostAppointment';
 import TCDeleteAppointment from './pages/TCDeleteAppointment';
 import ComingSoon         from './pages/ComingSoon';
+import Canvas             from './pages/Canvas';
+import Moodle             from './pages/Moodle';
+import D2L                from './pages/D2L';
+import AdminLoginMeazure  from './pages/AdminLoginMeazure';
+import CandidateLoginMeazure from './pages/CandidateLoginMeazure';
 
 export default function App() {
   return (
@@ -33,7 +39,7 @@ export default function App() {
       <Sidebar />
       <main style={{ flex: 1, overflowY: 'auto', background: '#f5f6fa' }}>
         <Routes>
-          <Route path="/" element={<Navigate to="/create-user" replace />} />
+          <Route path="/" element={<Home />} />
 
           {/* ── User Events ── */}
           <Route path="/create-user"     element={<CreateUser />} />
@@ -68,6 +74,15 @@ export default function App() {
           <Route path="/tc-availability"       element={<TCAvailability />} />
           <Route path="/tc-create-reservation" element={<TCPostAppointment />} />
           <Route path="/tc-cancel-reservation" element={<TCDeleteAppointment />} />
+
+          {/* ── LTI LMS Apps ── */}
+          <Route path="/canvas"   element={<Canvas />} />
+          <Route path="/moodle"   element={<Moodle />} />
+          <Route path="/d2l"      element={<D2L />} />
+
+          {/* ── Meazure Portals ── */}
+          <Route path="/admin-login-meazure"     element={<AdminLoginMeazure />} />
+          <Route path="/candidate-login-meazure" element={<CandidateLoginMeazure />} />
         </Routes>
       </main>
     </div>

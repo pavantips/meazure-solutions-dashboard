@@ -30,6 +30,36 @@ st.markdown("""
 
 
 # ══════════════════════════════════════════════════════════════
+# HOME PAGE
+# ══════════════════════════════════════════════════════════════
+
+def page_home():
+    st.markdown("""
+    <h1 style="font-size: 32px; font-weight: 700; color: #111827; margin-bottom: 8px;">
+      Customer LMS or CMS Application
+    </h1>
+    <p style="font-size: 16px; color: #6b7280; margin-bottom: 40px;">
+      Select a role and interface to get started
+    </p>
+    """, unsafe_allow_html=True)
+
+    categories = [
+        {'title': 'Proctoru', 'subtitle': 'Admin Interface', 'icon': '🔧', 'color': '#3b82f6', 'desc': 'Manage users and exams'},
+        {'title': 'Proctoru', 'subtitle': 'Candidate Interface', 'icon': '👤', 'color': '#8b5cf6', 'desc': 'Schedule and take exams'},
+        {'title': 'Meazure Exam Platform', 'subtitle': 'Admin Interface', 'icon': '⚙️', 'color': '#10b981', 'desc': 'Manage Meazure users'},
+        {'title': 'Meazure Exam Platform', 'subtitle': 'Candidate Interface', 'icon': '📚', 'color': '#06b6d4', 'desc': 'Access Meazure platform'},
+        {'title': 'LTI LMS Apps', 'subtitle': 'Learning Management Systems', 'icon': '🏫', 'color': '#f59e0b', 'desc': 'Canvas, Moodle, D2L'},
+        {'title': 'Test Center Apps', 'subtitle': 'Admin Interface', 'icon': '🏛️', 'color': '#ef4444', 'desc': 'Manage test centers'},
+        {'title': 'Test Center Apps', 'subtitle': 'Candidate Interface', 'icon': '🎯', 'color': '#ec4899', 'desc': 'Schedule test center exams'},
+    ]
+
+    cols = st.columns(3)
+    for idx, cat in enumerate(categories):
+        with cols[idx % 3]:
+            st.button(f"{cat['icon']}\n{cat['title']}\n{cat['subtitle']}", key=f"cat_{idx}", use_container_width=True)
+
+
+# ══════════════════════════════════════════════════════════════
 # SESSION CONTEXT — chain IDs across API calls
 # ══════════════════════════════════════════════════════════════
 
@@ -70,6 +100,65 @@ def extract_and_save(result: dict, **explicit):
                 if first.get(key):
                     set_ctx(**{key: first[key]})
 
+
+# ── Navigation Structure ──────────────────────────────────────
+NAVIGATION = {
+    'Home': None,
+    'Proctoru': {
+        'Customer LMS or CMS App': {
+            'Admin Interface': {
+                'Create User':            ('POST', 'page_create_user'),
+                'Add Bluebird':           ('POST', 'page_add_bluebird'),
+                'Fulfill Record+':        ('POST', 'page_record_plus_fulfill'),
+                'Create Exam':            ('POST', 'page_create_exam'),
+                'Get Terms':              ('GET',  'page_get_terms'),
+                'Get Departments':        ('GET',  'page_get_departments'),
+                'Get Reservations':       ('GET',  'page_get_reservations'),
+                'Cancel Reservation':     ('POST', 'page_cancel_reservation'),
+                'Reports': {
+                    'Bluebird Client Activity': ('POST', 'page_bluebird_client_activity'),
+                    'Client Activity Report':   ('POST', 'page_client_activity_report'),
+                    'Pending Exam Report':      ('POST', 'page_pending_exam_report'),
+                }
+            },
+            'Candidate Interface': {
+                'Add Adhoc':     ('POST', 'page_add_adhoc'),
+                'Record+':       ('POST', 'page_record_plus'),
+                'Auto Login':    ('POST', 'page_auto_login'),
+            }
+        }
+    },
+    'Meazure Exam Platform': {
+        'Admin Interface': {
+            'Admin Login':      ('LTI', 'page_admin_login_meazure'),
+            'Create User':      ('POST', 'page_meazure_create_user'),
+        },
+        'Candidate Interface': {
+            'Candidate Login':  ('LTI', 'page_candidate_login_meazure'),
+        }
+    },
+    'LTI LMS Apps': {
+        'Canvas':           ('LTI', 'page_canvas'),
+        'Moodle':           ('LTI', 'page_moodle'),
+        'D2L Brightspace':  ('LTI', 'page_d2l'),
+    },
+    'Test Center Apps': {
+        'Customer LMS or CMS App': {
+            'Admin Interface': {
+                'Get Institution':    ('GET', 'page_tc_get_institution'),
+                'Get Exams':          ('GET', 'page_tc_get_exams'),
+                'Delivery Windows':   ('GET', 'page_tc_delivery_windows'),
+                'Test Locations':     ('GET', 'page_tc_test_locations'),
+                'Availability':       ('GET', 'page_tc_availability'),
+                'Post Appointment':   ('POST', 'page_tc_post_appointment'),
+                'Delete Appointment': ('DELETE', 'page_tc_delete_appointment'),
+            },
+            'Candidate Interface': {
+                'Go to Proctoru.com': ('LINK', 'https://go.proctoru.com'),
+            }
+        }
+    }
+}
 
 # ── Sidebar ───────────────────────────────────────────────────
 PAGES = {
