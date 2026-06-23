@@ -17,6 +17,18 @@ st.markdown("""
 <style>
   [data-testid="stSidebar"] { background: #1e293b; }
   [data-testid="stSidebar"] * { color: #e2e8f0 !important; }
+
+  /* Sidebar button styling */
+  [data-testid="stSidebar"] button {
+    color: #e2e8f0 !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+  [data-testid="stSidebar"] button:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
+
   .ctx-section { font-size: 10px; font-weight: 700; color: #94a3b8;
                  text-transform: uppercase; letter-spacing: 0.08em; margin: 10px 0 5px; }
   .ctx-row { display: flex; justify-content: space-between; align-items: center;
@@ -35,28 +47,41 @@ st.markdown("""
 
 def page_home():
     st.markdown("""
-    <h1 style="font-size: 32px; font-weight: 700; color: #111827; margin-bottom: 8px;">
-      Customer LMS or CMS Application
+    <h1 style="font-size: 28px; font-weight: 700; color: #111827; margin-bottom: 16px;">
+      Welcome to Customer LMS or CMS Application
     </h1>
-    <p style="font-size: 16px; color: #6b7280; margin-bottom: 40px;">
-      Select a role and interface to get started
+    <p style="font-size: 15px; color: #6b7280; line-height: 1.6; margin-bottom: 32px;">
+      Use the sidebar navigation to explore different roles and interfaces:
     </p>
     """, unsafe_allow_html=True)
 
-    categories = [
-        {'title': 'Proctoru', 'subtitle': 'Admin Interface', 'icon': '🔧', 'color': '#3b82f6', 'desc': 'Manage users and exams'},
-        {'title': 'Proctoru', 'subtitle': 'Candidate Interface', 'icon': '👤', 'color': '#8b5cf6', 'desc': 'Schedule and take exams'},
-        {'title': 'Meazure Exam Platform', 'subtitle': 'Admin Interface', 'icon': '⚙️', 'color': '#10b981', 'desc': 'Manage Meazure users'},
-        {'title': 'Meazure Exam Platform', 'subtitle': 'Candidate Interface', 'icon': '📚', 'color': '#06b6d4', 'desc': 'Access Meazure platform'},
-        {'title': 'LTI LMS Apps', 'subtitle': 'Learning Management Systems', 'icon': '🏫', 'color': '#f59e0b', 'desc': 'Canvas, Moodle, D2L'},
-        {'title': 'Test Center Apps', 'subtitle': 'Admin Interface', 'icon': '🏛️', 'color': '#ef4444', 'desc': 'Manage test centers'},
-        {'title': 'Test Center Apps', 'subtitle': 'Candidate Interface', 'icon': '🎯', 'color': '#ec4899', 'desc': 'Schedule test center exams'},
-    ]
+    st.markdown("""
+    <div style="background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 4px; margin-bottom: 24px;">
+      <h3 style="color: #1e40af; margin-top: 0;">🔧 Proctoru</h3>
+      <p style="color: #1e3a8a; margin: 8px 0 0 0;">Manage user accounts, schedule exams, and view reservations.</p>
+    </div>
 
-    cols = st.columns(3)
-    for idx, cat in enumerate(categories):
-        with cols[idx % 3]:
-            st.button(f"{cat['icon']}\n{cat['title']}\n{cat['subtitle']}", key=f"cat_{idx}", use_container_width=True)
+    <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 16px; border-radius: 4px; margin-bottom: 24px;">
+      <h3 style="color: #065f46; margin-top: 0;">⚙️ Meazure Exam Platform</h3>
+      <p style="color: #064e3b; margin: 8px 0 0 0;">Access admin and candidate portals for the Meazure learning platform.</p>
+    </div>
+
+    <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 4px; margin-bottom: 24px;">
+      <h3 style="color: #b45309; margin-top: 0;">🏫 LTI LMS Apps</h3>
+      <p style="color: #78350f; margin: 8px 0 0 0;">Connect to Canvas, Moodle, and D2L Brightspace learning systems.</p>
+    </div>
+
+    <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 16px; border-radius: 4px;">
+      <h3 style="color: #991b1b; margin-top: 0;">🏛️ Test Center Apps</h3>
+      <p style="color: #7f1d1d; margin: 8px 0 0 0;">Manage test center appointments and check availability.</p>
+    </div>
+
+    <div style="margin-top: 32px; padding: 16px; background: #f3f4f6; border-radius: 4px;">
+      <p style="font-size: 12px; color: #6b7280; margin: 0;">
+        👉 <strong>Get started:</strong> Click on a category in the left sidebar to expand it and view available options.
+      </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════
@@ -202,9 +227,11 @@ with st.sidebar:
     if "_expanded" not in st.session_state:
         st.session_state._expanded = {}
 
-    # Home button
-    if st.button("🏠 Home", use_container_width=True, key="nav_home"):
-        st.session_state._nav_selection = "🏠 Home"
+    # Home button with better styling
+    col1, col2, col3 = st.columns([0.5, 2, 0.5])
+    with col2:
+        if st.button("🏠 Home", use_container_width=True, key="nav_home"):
+            st.session_state._nav_selection = "🏠 Home"
 
     st.markdown("---")
 
