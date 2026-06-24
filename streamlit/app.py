@@ -15,50 +15,60 @@ st.set_page_config(page_title="Customer LMS or CMS application", page_icon="🔬
 
 st.markdown("""
 <style>
+  /* Sidebar background */
   [data-testid="stSidebar"] { background: #1e293b; }
   [data-testid="stSidebar"] * { color: #e2e8f0 !important; }
 
-  /* Sidebar button styling - consistent colors */
-  [data-testid="stSidebar"] button {
-    color: #e2e8f0 !important;
-    background-color: #2d3f55 !important;
-    border: 1px solid #334155 !important;
-    font-weight: 500;
-  }
-  [data-testid="stSidebar"] button:hover {
-    background-color: #3d4f65 !important;
-    border: 1px solid #475569 !important;
-  }
-
-  /* Subcategory buttons - distinct gray-blue */
-  [data-testid="stSidebar"] button[key*="subcat_"] {
-    background-color: #1e3a5f !important;
-    border: 1px solid #2563eb22 !important;
-  }
-  [data-testid="stSidebar"] button[key*="subcat_"]:hover {
-    background-color: #2a4a7f !important;
-  }
-
-  /* API item buttons - lighter background */
-  [data-testid="stSidebar"] button[key*="nav_"],
-  [data-testid="stSidebar"] button[key*="group_"] {
-    background-color: #1a2332 !important;
-    border: none !important;
-    padding: 8px 12px !important;
-  }
-  [data-testid="stSidebar"] button[key*="nav_"]:hover,
-  [data-testid="stSidebar"] button[key*="group_"]:hover {
-    background-color: #253547 !important;
-  }
-
-  /* Home button - prominent */
-  [data-testid="stSidebar"] button[key="nav_home"] {
-    background-color: #3b82f6 !important;
-    border: 1px solid #2563eb !important;
+  /* Expander header - main categories */
+  [data-testid="stSidebar"] [data-testid="stExpander"] summary {
+    background: #2d3f55;
+    border-radius: 6px;
     font-weight: 600;
+    font-size: 14px;
+    padding: 10px 14px;
   }
-  [data-testid="stSidebar"] button[key="nav_home"]:hover {
-    background-color: #2563eb !important;
+  [data-testid="stSidebar"] [data-testid="stExpander"] summary:hover {
+    background: #374f6b;
+  }
+
+  /* Nested expander (subcategory) */
+  [data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpander"] summary {
+    background: #1e3a5f;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 12px;
+  }
+  [data-testid="stSidebar"] [data-testid="stExpander"] [data-testid="stExpander"] summary:hover {
+    background: #254e80;
+  }
+
+  /* Nav item buttons inside expanders */
+  [data-testid="stSidebar"] [data-testid="stExpander"] button {
+    background: transparent !important;
+    border: none !important;
+    color: #94a3b8 !important;
+    font-size: 13px !important;
+    text-align: left !important;
+    padding: 6px 8px !important;
+    width: 100% !important;
+  }
+  [data-testid="stSidebar"] [data-testid="stExpander"] button:hover {
+    background: #253547 !important;
+    color: #e2e8f0 !important;
+    border-radius: 5px !important;
+  }
+
+  /* Home button at top */
+  [data-testid="stSidebar"] > div > div > div > div > button {
+    background: #3b82f6 !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    color: white !important;
+    margin-bottom: 8px;
+  }
+  [data-testid="stSidebar"] > div > div > div > div > button:hover {
+    background: #2563eb !important;
   }
 
   .ctx-section { font-size: 10px; font-weight: 700; color: #94a3b8;
@@ -130,221 +140,68 @@ def extract_and_save(result: dict, **explicit):
                     set_ctx(**{key: first[key]})
 
 
-# ── Navigation Structure ──────────────────────────────────────
-NAVIGATION = {
-    'Home': None,
-    'Proctoru': {
-        'Customer LMS or CMS App': {
-            'Admin Interface': {
-                'Create User':            ('POST', 'page_create_user'),
-                'Add Bluebird':           ('POST', 'page_add_bluebird'),
-                'Fulfill Record+':        ('POST', 'page_record_plus_fulfill'),
-                'Create Exam':            ('POST', 'page_create_exam'),
-                'Get Terms':              ('GET',  'page_get_terms'),
-                'Get Departments':        ('GET',  'page_get_departments'),
-                'Get Reservations':       ('GET',  'page_get_reservations'),
-                'Cancel Reservation':     ('POST', 'page_cancel_reservation'),
-                'Reports': {
-                    'Bluebird Client Activity': ('POST', 'page_bluebird_client_activity'),
-                    'Client Activity Report':   ('POST', 'page_client_activity_report'),
-                    'Pending Exam Report':      ('POST', 'page_pending_exam_report'),
-                }
-            },
-            'Candidate Interface': {
-                'Add Adhoc':     ('POST', 'page_add_adhoc'),
-                'Record+':       ('POST', 'page_record_plus'),
-                'Auto Login':    ('POST', 'page_auto_login'),
-            }
-        }
-    },
-    'Meazure Exam Platform': {
-        'Admin Interface': {
-            'Admin Login':      ('LTI', 'page_admin_login_meazure'),
-            'Create User':      ('POST', 'page_meazure_create_user'),
-        },
-        'Candidate Interface': {
-            'Candidate Login':  ('LTI', 'page_candidate_login_meazure'),
-        }
-    },
-    'LTI LMS Apps': {
-        'Canvas':           ('LTI', 'page_canvas'),
-        'Moodle':           ('LTI', 'page_moodle'),
-        'D2L Brightspace':  ('LTI', 'page_d2l'),
-    },
-    'Test Center Apps': {
-        'Customer LMS or CMS App': {
-            'Admin Interface': {
-                'Get Institution':    ('GET', 'page_tc_get_institution'),
-                'Get Exams':          ('GET', 'page_tc_get_exams'),
-                'Delivery Windows':   ('GET', 'page_tc_delivery_windows'),
-                'Test Locations':     ('GET', 'page_tc_test_locations'),
-                'Availability':       ('GET', 'page_tc_availability'),
-                'Post Appointment':   ('POST', 'page_tc_post_appointment'),
-                'Delete Appointment': ('DELETE', 'page_tc_delete_appointment'),
-            },
-            'Candidate Interface': {
-                'Go to Proctoru.com': ('LINK', 'https://go.proctoru.com'),
-            }
-        }
-    }
-}
-
 # ── Sidebar ───────────────────────────────────────────────────
-PAGES = {
-    "🏠 Home": ("HOME", None),
-    "  Create User (Proctoru)": ("POST", None),
-    "  Add Bluebird": ("POST", None),
-    "  Fulfill Record+": ("POST", None),
-    "  Create Exam": ("POST", None),
-    "  Get Terms": ("GET", None),
-    "  Get Departments": ("GET", None),
-    "  Get Reservations": ("GET", None),
-    "  Cancel Reservation": ("POST", None),
-    "    📊 Bluebird Client Activity": ("POST", None),
-    "    📊 Client Activity Report": ("POST", None),
-    "    📊 Pending Exam Report": ("POST", None),
-    "  Add Adhoc": ("POST", None),
-    "  Record+": ("POST", None),
-    "  Auto Login": ("POST", None),
-    "  Canvas": ("LTI", None),
-    "  Moodle": ("LTI", None),
-    "  D2L Brightspace": ("LTI", None),
-    "  Admin Login": ("LTI", None),
-    "  Create User (Meazure)": ("POST", None),
-    "  Candidate Login": ("LTI", None),
-    "  Get Institution": ("GET", None),
-    "  Get Exams": ("GET", None),
-    "  Delivery Windows": ("GET", None),
-    "  Test Locations": ("GET", None),
-    "  Availability": ("GET", None),
-    "  Post Appointment": ("POST", None),
-    "  Delete Appointment": ("DEL", None),
-}
+def _sel(key):
+    st.session_state["selection"] = key
 
 with st.sidebar:
-    st.markdown("### Customer LMS or CMS application")
+    st.markdown("**Customer LMS or CMS application**")
     st.markdown("---")
 
-    # Initialize session state for navigation
-    if "_nav_selection" not in st.session_state:
-        st.session_state._nav_selection = "🏠 Home"
-    if "_expanded" not in st.session_state:
-        st.session_state._expanded = {}
+    if st.button("🏠 Home", use_container_width=True, key="nav_home"):
+        _sel("home")
 
-    # Home button with better styling
-    col1, col2, col3 = st.columns([0.5, 2, 0.5])
-    with col2:
-        if st.button("🏠 Home", use_container_width=True, key="nav_home"):
-            st.session_state._nav_selection = "🏠 Home"
+    with st.expander("🔧 Proctoru"):
+        with st.expander("Admin Interface"):
+            if st.button("Create User",          key="s_create_user",    use_container_width=True): _sel("create_user")
+            if st.button("Add Bluebird",          key="s_add_bluebird",   use_container_width=True): _sel("add_bluebird")
+            if st.button("Fulfill Record+",       key="s_fulfill_rp",     use_container_width=True): _sel("fulfill_rp")
+            if st.button("Create Exam",           key="s_create_exam",    use_container_width=True): _sel("create_exam")
+            if st.button("Get Terms",             key="s_get_terms",      use_container_width=True): _sel("get_terms")
+            if st.button("Get Departments",       key="s_get_depts",      use_container_width=True): _sel("get_depts")
+            if st.button("Get Reservations",      key="s_get_res",        use_container_width=True): _sel("get_res")
+            if st.button("Cancel Reservation",    key="s_cancel_res",     use_container_width=True): _sel("cancel_res")
+            with st.expander("📊 Reports"):
+                if st.button("Bluebird Client Activity", key="s_bb_activity",  use_container_width=True): _sel("bb_activity")
+                if st.button("Client Activity Report",   key="s_ca_report",    use_container_width=True): _sel("ca_report")
+                if st.button("Pending Exam Report",      key="s_pending_exam", use_container_width=True): _sel("pending_exam")
+        with st.expander("Candidate Interface"):
+            if st.button("Add Adhoc",   key="s_add_adhoc",  use_container_width=True): _sel("add_adhoc")
+            if st.button("Record+",     key="s_record_plus", use_container_width=True): _sel("record_plus")
+            if st.button("Auto Login",  key="s_auto_login",  use_container_width=True): _sel("auto_login")
 
-    st.markdown("---")
+    with st.expander("⚙️ Meazure Exam Platform"):
+        with st.expander("Admin Interface"):
+            if st.button("Admin Login",   key="s_mz_admin",  use_container_width=True): _sel("mz_admin")
+            if st.button("Create User",   key="s_mz_user",   use_container_width=True): _sel("mz_user")
+        with st.expander("Candidate Interface"):
+            if st.button("Candidate Login", key="s_mz_cand", use_container_width=True): _sel("mz_cand")
 
-    # Navigation structure
-    nav_items = {
-        "🔧 Proctoru": {
-            "Admin Interface": [
-                ("Create User (Proctoru)", "  Create User (Proctoru)"),
-                ("Add Bluebird", "  Add Bluebird"),
-                ("Fulfill Record+", "  Fulfill Record+"),
-                ("Create Exam", "  Create Exam"),
-                ("Get Terms", "  Get Terms"),
-                ("Get Departments", "  Get Departments"),
-                ("Get Reservations", "  Get Reservations"),
-                ("Cancel Reservation", "  Cancel Reservation"),
-                ("Reports", None, [
-                    ("Bluebird Client Activity", "    📊 Bluebird Client Activity"),
-                    ("Client Activity Report", "    📊 Client Activity Report"),
-                    ("Pending Exam Report", "    📊 Pending Exam Report"),
-                ])
-            ],
-            "Candidate Interface": [
-                ("Add Adhoc", "  Add Adhoc"),
-                ("Record+", "  Record+"),
-                ("Auto Login", "  Auto Login"),
-            ]
-        },
-        "⚙️ Meazure Exam Platform": {
-            "Admin Interface": [
-                ("Admin Login", "  Admin Login"),
-                ("Create User (Meazure)", "  Create User (Meazure)"),
-            ],
-            "Candidate Interface": [
-                ("Candidate Login", "  Candidate Login"),
-            ]
-        },
-        "🏫 LTI LMS Apps": {
-            None: [
-                ("Canvas", "  Canvas"),
-                ("Moodle", "  Moodle"),
-                ("D2L Brightspace", "  D2L Brightspace"),
-            ]
-        },
-        "🏛️ Test Center Apps": {
-            "Admin Interface": [
-                ("Get Institution", "  Get Institution"),
-                ("Get Exams", "  Get Exams"),
-                ("Delivery Windows", "  Delivery Windows"),
-                ("Test Locations", "  Test Locations"),
-                ("Availability", "  Availability"),
-                ("Post Appointment", "  Post Appointment"),
-                ("Delete Appointment", "  Delete Appointment"),
-            ],
-        }
-    }
+    with st.expander("🏫 LTI LMS Apps"):
+        if st.button("Canvas",        key="s_canvas", use_container_width=True): _sel("canvas")
+        if st.button("Moodle",        key="s_moodle", use_container_width=True): _sel("moodle")
+        if st.button("D2L Brightspace", key="s_d2l",  use_container_width=True): _sel("d2l")
 
-    # Render expandable navigation with visual hierarchy
-    for category, subcategories in nav_items.items():
-        is_expanded = st.session_state._expanded.get(category, False)
+    with st.expander("🏛️ Test Center Apps"):
+        with st.expander("Admin Interface"):
+            if st.button("Get Institution",    key="s_tc_inst",   use_container_width=True): _sel("tc_inst")
+            if st.button("Get Exams",          key="s_tc_exams",  use_container_width=True): _sel("tc_exams")
+            if st.button("Delivery Windows",   key="s_tc_dw",     use_container_width=True): _sel("tc_dw")
+            if st.button("Test Locations",     key="s_tc_loc",    use_container_width=True): _sel("tc_loc")
+            if st.button("Availability",       key="s_tc_avail",  use_container_width=True): _sel("tc_avail")
+            if st.button("Post Appointment",   key="s_tc_post",   use_container_width=True): _sel("tc_post")
+            if st.button("Delete Appointment", key="s_tc_del",    use_container_width=True): _sel("tc_del")
+        with st.expander("Candidate Interface"):
+            st.markdown("[↗ Go to Proctoru.com](https://go.proctoru.com)", unsafe_allow_html=True)
 
-        # Main category button - prominent, no arrows
-        if st.button(category, use_container_width=True, key=f"cat_{category}"):
-            st.session_state._expanded[category] = not is_expanded
-            st.rerun()
-
-        if st.session_state._expanded.get(category, False):
-            for subcat, items in subcategories.items():
-                if subcat is None:
-                    # Direct items (for LTI which has no Admin/Candidate split)
-                    for item in items:
-                        if len(item) == 2:
-                            label, page_key = item
-                            if st.button(f"  {label}", use_container_width=True, key=f"nav_{page_key}"):
-                                st.session_state._nav_selection = page_key
-                else:
-                    # Subcategory (Admin/Candidate) - distinct color
-                    is_sub_expanded = st.session_state._expanded.get(f"{category}/{subcat}", False)
-                    if st.button(f"  {subcat}", use_container_width=True, key=f"subcat_{category}/{subcat}"):
-                        st.session_state._expanded[f"{category}/{subcat}"] = not is_sub_expanded
-                        st.rerun()
-
-                    if st.session_state._expanded.get(f"{category}/{subcat}", False):
-                        for item in items:
-                            if len(item) == 2:
-                                label, page_key = item
-                                if st.button(f"    {label}", use_container_width=True, key=f"nav_{page_key}"):
-                                    st.session_state._nav_selection = page_key
-                            elif len(item) == 3:
-                                # Nested group (like Reports) - distinct styling
-                                label, _, subitems = item
-                                is_group_expanded = st.session_state._expanded.get(f"{category}/{subcat}/{label}", False)
-                                if st.button(f"    📊 {label}", use_container_width=True, key=f"group_{category}/{subcat}/{label}"):
-                                    st.session_state._expanded[f"{category}/{subcat}/{label}"] = not is_group_expanded
-                                    st.rerun()
-
-                                if st.session_state._expanded.get(f"{category}/{subcat}/{label}", False):
-                                    for sub_item in subitems:
-                                        sub_label, sub_page_key = sub_item
-                                        if st.button(f"      {sub_label}", use_container_width=True, key=f"nav_{sub_page_key}"):
-                                            st.session_state._nav_selection = sub_page_key
-
-    st.markdown("---")
-    st.caption("💡 Select an option to begin")
-    selection = st.session_state._nav_selection
+selection = st.session_state.get("selection", "home")
 
 # Clear last result when navigating
-if st.session_state.get("_page") != selection:
+_prev = st.session_state.get("_page")
+if _prev != selection:
     st.session_state["_page"] = selection
-    st.session_state.pop("last_result", None)
+    if _prev is not None:
+        st.session_state.pop("last_result", None)
 
 
 # ══════════════════════════════════════════════════════════════
@@ -1245,41 +1102,42 @@ def render_ctx_panel():
 # ══════════════════════════════════════════════════════════════
 
 PAGE_MAP = {
-    "🏠 Home": page_home,
-    "  Create User (Proctoru)": page_create_user,
-    "  Add Bluebird": page_add_bluebird,
-    "  Fulfill Record+": page_record_plus_fulfill,
-    "  Create Exam": page_create_exam,
-    "  Get Terms": page_get_terms,
-    "  Get Departments": page_get_departments,
-    "  Get Reservations": page_get_reservations,
-    "  Cancel Reservation": page_cancel_reservation,
-    "    📊 Bluebird Client Activity": page_bluebird_client_activity,
-    "    📊 Client Activity Report": page_client_activity_report,
-    "    📊 Pending Exam Report": page_pending_exam_report,
-    "  Add Adhoc": page_add_adhoc,
-    "  Record+": page_record_plus,
-    "  Auto Login": page_auto_login,
-    "  Canvas": page_canvas,
-    "  Moodle": page_moodle,
-    "  D2L Brightspace": page_d2l,
-    "  Admin Login": page_admin_login,
-    "  Create User (Meazure)": page_meazure_create_user,
-    "  Candidate Login": page_candidate_login,
-    "  Get Institution": page_tc_get_institution,
-    "  Get Exams": page_tc_get_exams,
-    "  Delivery Windows": page_tc_delivery_windows,
-    "  Test Locations": page_tc_test_locations,
-    "  Availability": page_tc_availability,
-    "  Post Appointment": page_tc_post_appointment,
-    "  Delete Appointment": page_tc_delete_appointment,
+    "home":         page_home,
+    "create_user":  page_create_user,
+    "add_bluebird": page_add_bluebird,
+    "fulfill_rp":   page_record_plus_fulfill,
+    "create_exam":  page_create_exam,
+    "get_terms":    page_get_terms,
+    "get_depts":    page_get_departments,
+    "get_res":      page_get_reservations,
+    "cancel_res":   page_cancel_reservation,
+    "bb_activity":  page_bluebird_client_activity,
+    "ca_report":    page_client_activity_report,
+    "pending_exam": page_pending_exam_report,
+    "add_adhoc":    page_add_adhoc,
+    "record_plus":  page_record_plus,
+    "auto_login":   page_auto_login,
+    "canvas":       page_canvas,
+    "moodle":       page_moodle,
+    "d2l":          page_d2l,
+    "mz_admin":     page_admin_login,
+    "mz_user":      page_meazure_create_user,
+    "mz_cand":      page_candidate_login,
+    "tc_inst":      page_tc_get_institution,
+    "tc_exams":     page_tc_get_exams,
+    "tc_dw":        page_tc_delivery_windows,
+    "tc_loc":       page_tc_test_locations,
+    "tc_avail":     page_tc_availability,
+    "tc_post":      page_tc_post_appointment,
+    "tc_del":       page_tc_delete_appointment,
 }
 
-if PAGES.get(selection) is None:
-    st.info("Select an endpoint from the sidebar to get started.")
+page_fn = PAGE_MAP.get(selection, page_home)
+if selection == "home":
+    page_home()
 else:
     main_col, ctx_col = st.columns([3, 1], gap="large")
     with main_col:
-        PAGE_MAP[selection]()
+        page_fn()
     with ctx_col:
         render_ctx_panel()
