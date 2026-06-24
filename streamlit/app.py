@@ -47,39 +47,11 @@ st.markdown("""
 
 def page_home():
     st.markdown("""
-    <h1 style="font-size: 28px; font-weight: 700; color: #111827; margin-bottom: 16px;">
-      Welcome to Customer LMS or CMS Application
-    </h1>
-    <p style="font-size: 15px; color: #6b7280; line-height: 1.6; margin-bottom: 32px;">
-      Use the sidebar navigation to explore different roles and interfaces:
-    </p>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div style="background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 4px; margin-bottom: 24px;">
-      <h3 style="color: #1e40af; margin-top: 0;">🔧 Proctoru</h3>
-      <p style="color: #1e3a8a; margin: 8px 0 0 0;">Manage user accounts, schedule exams, and view reservations.</p>
-    </div>
-
-    <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 16px; border-radius: 4px; margin-bottom: 24px;">
-      <h3 style="color: #065f46; margin-top: 0;">⚙️ Meazure Exam Platform</h3>
-      <p style="color: #064e3b; margin: 8px 0 0 0;">Access admin and candidate portals for the Meazure learning platform.</p>
-    </div>
-
-    <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 4px; margin-bottom: 24px;">
-      <h3 style="color: #b45309; margin-top: 0;">🏫 LTI LMS Apps</h3>
-      <p style="color: #78350f; margin: 8px 0 0 0;">Connect to Canvas, Moodle, and D2L Brightspace learning systems.</p>
-    </div>
-
-    <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 16px; border-radius: 4px;">
-      <h3 style="color: #991b1b; margin-top: 0;">🏛️ Test Center Apps</h3>
-      <p style="color: #7f1d1d; margin: 8px 0 0 0;">Manage test center appointments and check availability.</p>
-    </div>
-
-    <div style="margin-top: 32px; padding: 16px; background: #f3f4f6; border-radius: 4px;">
-      <p style="font-size: 12px; color: #6b7280; margin: 0;">
-        👉 <strong>Get started:</strong> Click on a category in the left sidebar to expand it and view available options.
-      </p>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;
+                height: 60vh; text-align: center;">
+      <div style="font-size: 48px; margin-bottom: 20px;">👈</div>
+      <h2 style="color: #6b7280; margin: 0 0 10px 0; font-size: 18px;">Select an option from the sidebar</h2>
+      <p style="color: #9ca3af; margin: 0; font-size: 14px;">Click on a category to expand and view available options</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -288,11 +260,12 @@ with st.sidebar:
         }
     }
 
-    # Render expandable navigation
+    # Render expandable navigation with visual hierarchy
     for category, subcategories in nav_items.items():
         is_expanded = st.session_state._expanded.get(category, False)
 
-        if st.button(category, use_container_width=True, key=f"cat_{category}"):
+        # Main category button - bold, prominent
+        if st.button(f"{category} {'▼' if is_expanded else '▶'}", use_container_width=True, key=f"cat_{category}"):
             st.session_state._expanded[category] = not is_expanded
             st.rerun()
 
@@ -303,12 +276,12 @@ with st.sidebar:
                     for item in items:
                         if len(item) == 2:
                             label, page_key = item
-                            if st.button(label, use_container_width=True, key=f"nav_{page_key}"):
+                            if st.button(f"   {label}", use_container_width=True, key=f"nav_{page_key}"):
                                 st.session_state._nav_selection = page_key
                 else:
-                    # Subcategory (Admin/Candidate)
+                    # Subcategory (Admin/Candidate) - slightly indented
                     is_sub_expanded = st.session_state._expanded.get(f"{category}/{subcat}", False)
-                    if st.button(f"  {subcat}", use_container_width=True, key=f"subcat_{category}/{subcat}"):
+                    if st.button(f"  {subcat} {'▼' if is_sub_expanded else '▶'}", use_container_width=True, key=f"subcat_{category}/{subcat}"):
                         st.session_state._expanded[f"{category}/{subcat}"] = not is_sub_expanded
                         st.rerun()
 
@@ -316,22 +289,24 @@ with st.sidebar:
                         for item in items:
                             if len(item) == 2:
                                 label, page_key = item
-                                if st.button(label, use_container_width=True, key=f"nav_{page_key}"):
+                                if st.button(f"     {label}", use_container_width=True, key=f"nav_{page_key}"):
                                     st.session_state._nav_selection = page_key
                             elif len(item) == 3:
-                                # Nested group (like Reports)
+                                # Nested group (like Reports) - gray/muted
                                 label, _, subitems = item
                                 is_group_expanded = st.session_state._expanded.get(f"{category}/{subcat}/{label}", False)
-                                if st.button(f"    {label}", use_container_width=True, key=f"group_{category}/{subcat}/{label}"):
+                                if st.button(f"     📊 {label} {'▼' if is_group_expanded else '▶'}", use_container_width=True, key=f"group_{category}/{subcat}/{label}"):
                                     st.session_state._expanded[f"{category}/{subcat}/{label}"] = not is_group_expanded
                                     st.rerun()
 
                                 if st.session_state._expanded.get(f"{category}/{subcat}/{label}", False):
                                     for sub_item in subitems:
                                         sub_label, sub_page_key = sub_item
-                                        if st.button(sub_page_key, use_container_width=True, key=f"nav_{sub_page_key}"):
+                                        if st.button(f"        {sub_label}", use_container_width=True, key=f"nav_{sub_page_key}"):
                                             st.session_state._nav_selection = sub_page_key
 
+    st.markdown("---")
+    st.caption("💡 Select an option to begin")
     selection = st.session_state._nav_selection
 
 # Clear last result when navigating
