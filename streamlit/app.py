@@ -18,15 +18,47 @@ st.markdown("""
   [data-testid="stSidebar"] { background: #1e293b; }
   [data-testid="stSidebar"] * { color: #e2e8f0 !important; }
 
-  /* Sidebar button styling */
+  /* Sidebar button styling - consistent colors */
   [data-testid="stSidebar"] button {
     color: #e2e8f0 !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background-color: #2d3f55 !important;
+    border: 1px solid #334155 !important;
+    font-weight: 500;
   }
   [data-testid="stSidebar"] button:hover {
-    background-color: rgba(255, 255, 255, 0.2) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background-color: #3d4f65 !important;
+    border: 1px solid #475569 !important;
+  }
+
+  /* Subcategory buttons - distinct gray-blue */
+  [data-testid="stSidebar"] button[key*="subcat_"] {
+    background-color: #1e3a5f !important;
+    border: 1px solid #2563eb22 !important;
+  }
+  [data-testid="stSidebar"] button[key*="subcat_"]:hover {
+    background-color: #2a4a7f !important;
+  }
+
+  /* API item buttons - lighter background */
+  [data-testid="stSidebar"] button[key*="nav_"],
+  [data-testid="stSidebar"] button[key*="group_"] {
+    background-color: #1a2332 !important;
+    border: none !important;
+    padding: 8px 12px !important;
+  }
+  [data-testid="stSidebar"] button[key*="nav_"]:hover,
+  [data-testid="stSidebar"] button[key*="group_"]:hover {
+    background-color: #253547 !important;
+  }
+
+  /* Home button - prominent */
+  [data-testid="stSidebar"] button[key="nav_home"] {
+    background-color: #3b82f6 !important;
+    border: 1px solid #2563eb !important;
+    font-weight: 600;
+  }
+  [data-testid="stSidebar"] button[key="nav_home"]:hover {
+    background-color: #2563eb !important;
   }
 
   .ctx-section { font-size: 10px; font-weight: 700; color: #94a3b8;
@@ -264,8 +296,8 @@ with st.sidebar:
     for category, subcategories in nav_items.items():
         is_expanded = st.session_state._expanded.get(category, False)
 
-        # Main category button - bold, prominent
-        if st.button(f"{category} {'▼' if is_expanded else '▶'}", use_container_width=True, key=f"cat_{category}"):
+        # Main category button - prominent, no arrows
+        if st.button(category, use_container_width=True, key=f"cat_{category}"):
             st.session_state._expanded[category] = not is_expanded
             st.rerun()
 
@@ -276,12 +308,12 @@ with st.sidebar:
                     for item in items:
                         if len(item) == 2:
                             label, page_key = item
-                            if st.button(f"   {label}", use_container_width=True, key=f"nav_{page_key}"):
+                            if st.button(f"  {label}", use_container_width=True, key=f"nav_{page_key}"):
                                 st.session_state._nav_selection = page_key
                 else:
-                    # Subcategory (Admin/Candidate) - slightly indented
+                    # Subcategory (Admin/Candidate) - distinct color
                     is_sub_expanded = st.session_state._expanded.get(f"{category}/{subcat}", False)
-                    if st.button(f"  {subcat} {'▼' if is_sub_expanded else '▶'}", use_container_width=True, key=f"subcat_{category}/{subcat}"):
+                    if st.button(f"  {subcat}", use_container_width=True, key=f"subcat_{category}/{subcat}"):
                         st.session_state._expanded[f"{category}/{subcat}"] = not is_sub_expanded
                         st.rerun()
 
@@ -289,20 +321,20 @@ with st.sidebar:
                         for item in items:
                             if len(item) == 2:
                                 label, page_key = item
-                                if st.button(f"     {label}", use_container_width=True, key=f"nav_{page_key}"):
+                                if st.button(f"    {label}", use_container_width=True, key=f"nav_{page_key}"):
                                     st.session_state._nav_selection = page_key
                             elif len(item) == 3:
-                                # Nested group (like Reports) - gray/muted
+                                # Nested group (like Reports) - distinct styling
                                 label, _, subitems = item
                                 is_group_expanded = st.session_state._expanded.get(f"{category}/{subcat}/{label}", False)
-                                if st.button(f"     📊 {label} {'▼' if is_group_expanded else '▶'}", use_container_width=True, key=f"group_{category}/{subcat}/{label}"):
+                                if st.button(f"    📊 {label}", use_container_width=True, key=f"group_{category}/{subcat}/{label}"):
                                     st.session_state._expanded[f"{category}/{subcat}/{label}"] = not is_group_expanded
                                     st.rerun()
 
                                 if st.session_state._expanded.get(f"{category}/{subcat}/{label}", False):
                                     for sub_item in subitems:
                                         sub_label, sub_page_key = sub_item
-                                        if st.button(f"        {sub_label}", use_container_width=True, key=f"nav_{sub_page_key}"):
+                                        if st.button(f"      {sub_label}", use_container_width=True, key=f"nav_{sub_page_key}"):
                                             st.session_state._nav_selection = sub_page_key
 
     st.markdown("---")
