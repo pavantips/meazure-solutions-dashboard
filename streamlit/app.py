@@ -153,7 +153,8 @@ with st.sidebar:
 
     with st.expander("🔧 Proctoru"):
         with st.expander("Admin Interface"):
-            if st.button("Create User",          key="s_create_user",    use_container_width=True): _sel("create_user")
+            if st.button("Admin Login",           key="s_pu_admin",       use_container_width=True): _sel("pu_admin")
+            if st.button("Create User",           key="s_create_user",    use_container_width=True): _sel("create_user")
             if st.button("Add Bluebird",          key="s_add_bluebird",   use_container_width=True): _sel("add_bluebird")
             if st.button("Fulfill Record+",       key="s_fulfill_rp",     use_container_width=True): _sel("fulfill_rp")
             if st.button("Create Exam",           key="s_create_exam",    use_container_width=True): _sel("create_exam")
@@ -166,6 +167,7 @@ with st.sidebar:
                 if st.button("Client Activity Report",   key="s_ca_report",    use_container_width=True): _sel("ca_report")
                 if st.button("Pending Exam Report",      key="s_pending_exam", use_container_width=True): _sel("pending_exam")
         with st.expander("Candidate Interface"):
+            if st.button("Standalone Login",   key="s_pu_standalone",   use_container_width=True): _sel("pu_standalone")
             if st.button("Add Adhoc",          key="s_add_adhoc",       use_container_width=True): _sel("add_adhoc")
             if st.button("Record+",            key="s_record_plus",     use_container_width=True): _sel("record_plus")
             if st.button("Begin Reservation",  key="s_begin_res",       use_container_width=True): _sel("begin_res")
@@ -839,6 +841,30 @@ def page_admin_login():
     """, unsafe_allow_html=True)
 
 
+def page_pu_admin_login():
+    st.title("Admin Login")
+    st.caption("Opens the ProctorU admin portal.")
+    st.markdown("""
+    <a href="https://go.proctoru.com" target="_blank"
+       style="display:inline-block;padding:10px 20px;background:#4f46e5;color:white;
+              border-radius:7px;font-weight:700;text-decoration:none;font-size:14px;">
+      ↗ Open ProctorU Admin
+    </a>
+    """, unsafe_allow_html=True)
+
+
+def page_pu_standalone_login():
+    st.title("Standalone Login")
+    st.caption("Opens the ProctorU standalone candidate login.")
+    st.markdown("""
+    <a href="https://go.proctoru.com" target="_blank"
+       style="display:inline-block;padding:10px 20px;background:#4f46e5;color:white;
+              border-radius:7px;font-weight:700;text-decoration:none;font-size:14px;">
+      ↗ Open ProctorU Login
+    </a>
+    """, unsafe_allow_html=True)
+
+
 def page_tc_get_institution():
     st.markdown("**`GET`** `api.proctoru.com/api/v2/whoami`")
     st.title("TC: Get Institution")
@@ -1104,6 +1130,8 @@ def render_ctx_panel():
 
 PAGE_MAP = {
     "home":         page_home,
+    "pu_admin":     page_pu_admin_login,
+    "pu_standalone": page_pu_standalone_login,
     "create_user":  page_create_user,
     "add_bluebird": page_add_bluebird,
     "fulfill_rp":   page_record_plus_fulfill,
