@@ -166,9 +166,10 @@ with st.sidebar:
                 if st.button("Client Activity Report",   key="s_ca_report",    use_container_width=True): _sel("ca_report")
                 if st.button("Pending Exam Report",      key="s_pending_exam", use_container_width=True): _sel("pending_exam")
         with st.expander("Candidate Interface"):
-            if st.button("Add Adhoc",   key="s_add_adhoc",  use_container_width=True): _sel("add_adhoc")
-            if st.button("Record+",     key="s_record_plus", use_container_width=True): _sel("record_plus")
-            if st.button("Auto Login",  key="s_auto_login",  use_container_width=True): _sel("auto_login")
+            if st.button("Add Adhoc",          key="s_add_adhoc",       use_container_width=True): _sel("add_adhoc")
+            if st.button("Record+",            key="s_record_plus",     use_container_width=True): _sel("record_plus")
+            if st.button("Begin Reservation",  key="s_begin_res",       use_container_width=True): _sel("begin_res")
+            if st.button("Auto Login",         key="s_auto_login",      use_container_width=True): _sel("auto_login")
 
     with st.expander("⚙️ Meazure Exam Platform"):
         with st.expander("Admin Interface"):
@@ -1116,6 +1117,7 @@ PAGE_MAP = {
     "pending_exam": page_pending_exam_report,
     "add_adhoc":    page_add_adhoc,
     "record_plus":  page_record_plus,
+    "begin_res":    page_begin_reservation,
     "auto_login":   page_auto_login,
     "canvas":       page_canvas,
     "moodle":       page_moodle,
