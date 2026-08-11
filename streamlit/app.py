@@ -348,8 +348,8 @@ def page_add_bluebird():
         tz          = c6.selectbox("time_zone_id",  TIMEZONES)
         exam_url    = st.text_input("exam_url",     value="https://exam-demo.streamlit.app/")
         c7, c8 = st.columns(2)
-        active_date = c7.text_input("active_date",  value=(datetime.now(timezone.utc) + timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ"))
-        end_date    = c8.text_input("end_date",     value=(datetime.now(timezone.utc) + timedelta(days=8)).strftime("%Y-%m-%dT%H:%M:%SZ"))
+        active_date = c7.text_input("active_date",  value=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
+        end_date    = c8.text_input("end_date",     value=(datetime.now(timezone.utc) + timedelta(days=14)).strftime("%Y-%m-%dT%H:%M:%SZ"))
         submitted   = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
         body = dict(first_name=first_name, last_name=last_name, email=email,
