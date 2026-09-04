@@ -350,12 +350,21 @@ def page_add_bluebird():
         c7, c8 = st.columns(2)
         active_date = c7.text_input("active_date",  value=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
         end_date    = c8.text_input("end_date",     value=(datetime.now(timezone.utc) + timedelta(days=14)).strftime("%Y-%m-%dT%H:%M:%SZ"))
+        permitted_resources_list = st.text_input("permitted_resources_list (optional)",
+                                                  placeholder="e.g. scratch_paper, online_calculator")
+        other_resources = st.text_area("other_resources (optional)",
+                                        placeholder="Free text — describe any other resources allowed for this exam",
+                                        height=80)
         submitted   = st.form_submit_button("⚡ Send Request", use_container_width=True)
     if submitted:
         body = dict(first_name=first_name, last_name=last_name, email=email,
                     student_id=student_id, exam_id=exam_id, description=description,
                     duration=str(duration), time_zone_id=tz, exam_url=exam_url,
                     active_date=active_date, end_date=end_date, time_sent=now_iso())
+        if permitted_resources_list.strip():
+            body["permitted_resources_list"] = permitted_resources_list.strip()
+        if other_resources.strip():
+            body["other_resources"] = other_resources.strip()
         with st.spinner("Calling API..."):
             result = post_json(f"{API_BASE}/addBlueBirdExam", body)
         extract_and_save(result, student_id=student_id, exam_id=exam_id,
