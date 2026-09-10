@@ -5,7 +5,6 @@ Meazure Solutions — API Integration Playground (Streamlit)
 import uuid
 import random
 import streamlit as st
-import streamlit.components.v1 as components
 from datetime import datetime, timezone, timedelta
 from api.client import (
     API_BASE, DEMO_BASE, GO_BASE, TC_BASE, TC_GO_BASE, MEAZURE_BASE, MEAZURE_TOKEN,
@@ -99,98 +98,6 @@ def page_home():
     """, unsafe_allow_html=True)
 
 
-def page_examplify():
-    components.html("""
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800&display=swap">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; font-family: 'Barlow', sans-serif; background: #0e4a4a; }
-
-  .site-header {
-    background: #ffffff;
-    border-bottom: 1px solid #d8e8e8;
-    display: flex; align-items: center; justify-content: center;
-    padding: 14px 32px;
-  }
-  .logo { display: flex; flex-direction: column; align-items: center; gap: 1px; }
-  .logo-wordmark { font-weight: 800; font-size: 22px; letter-spacing: 0.18em; color: #0e2e2e; }
-  .logo-sub { font-size: 9px; font-weight: 600; letter-spacing: 0.28em; color: #0e2e2e; text-transform: uppercase; }
-
-  .hero {
-    background: #0e4a4a;
-    min-height: calc(100vh - 101px);
-    display: grid; grid-template-columns: 1fr 1fr;
-    align-items: center; overflow: hidden;
-  }
-  .hero-content { padding: 64px 56px 64px 72px; max-width: 520px; }
-  .eyebrow { font-size: 14px; font-weight: 600; color: #b8dfdc; margin-bottom: 20px; }
-  .hero-heading { font-size: clamp(32px, 4vw, 48px); font-weight: 800; line-height: 1.15; color: #ffffff; margin-bottom: 28px; }
-  .hero-body { font-size: 16px; line-height: 1.65; color: rgba(255,255,255,0.82); margin-bottom: 20px; max-width: 38ch; }
-  .hero-sign-off { font-size: 16px; font-weight: 700; color: #ffffff; }
-
-  .hero-visual { position: relative; height: 100%; min-height: 380px; }
-  .visual-svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-
-  .site-footer {
-    background: #082e2e; padding: 14px 32px;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-  }
-  .footer-copy { font-size: 12px; color: #7ab8b6; }
-  .footer-logo { font-size: 14px; font-weight: 800; letter-spacing: 0.2em; color: #7ab8b6; }
-</style>
-</head>
-<body>
-
-<header class="site-header">
-  <div class="logo">
-    <div class="logo-wordmark">MEAZURE</div>
-    <div class="logo-sub">Learning</div>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="hero-content">
-    <p class="eyebrow">Demo Customer Students</p>
-    <h1 class="hero-heading">It's Time to Open the&nbsp;Examplify App!</h1>
-    <p class="hero-body">Once Examplify is open, navigate to your exam and your proctor will enter the password for you to begin.</p>
-    <p class="hero-sign-off">Good luck on your exam!</p>
-  </div>
-  <div class="hero-visual">
-    <svg class="visual-svg" viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-      <polygon points="480,30 270,390 500,390" fill="none" stroke="#5ecfcb" stroke-width="2" opacity="0.55"/>
-      <polygon points="310,60 150,350 370,350" fill="none" stroke="#5ecfcb" stroke-width="1.5" opacity="0.35"/>
-      <polygon points="430,20 360,120 480,120" fill="#3aadaa" opacity="0.18"/>
-      <polygon points="500,250 400,420 500,420" fill="#3aadaa" opacity="0.28"/>
-      <circle cx="440" cy="160" r="5" fill="#5ecfcb" opacity="0.5"/>
-      <circle cx="120" cy="100" r="3" fill="#5ecfcb" opacity="0.3"/>
-      <rect x="100" y="300" width="260" height="8" rx="4" fill="#5ecfcb" opacity="0.5"/>
-      <rect x="155" y="272" width="150" height="30" rx="5" fill="#1d6060"/>
-      <rect x="162" y="195" width="136" height="82" rx="5" fill="#1d6060"/>
-      <rect x="170" y="202" width="120" height="68" rx="3" fill="#5ecfcb" opacity="0.12"/>
-      <line x1="155" y1="272" x2="305" y2="272" stroke="#0d4040" stroke-width="3"/>
-      <rect x="195" y="232" width="70" height="70" rx="20" fill="#d4896a"/>
-      <circle cx="230" cy="210" r="28" fill="#d4896a"/>
-      <ellipse cx="230" cy="190" rx="28" ry="18" fill="#1a0e05"/>
-      <ellipse cx="230" cy="183" rx="18" ry="10" fill="#1a0e05"/>
-      <path d="M210,258 Q230,268 250,258" stroke="#b87050" stroke-width="3" fill="none"/>
-    </svg>
-  </div>
-</section>
-
-<footer class="site-footer">
-  <p class="footer-copy">© Copyright Meazure Learning 2026</p>
-  <div class="footer-logo">MEAZURE</div>
-</footer>
-
-</body>
-</html>
-    """, height=600, scrolling=False)
-
 
 # ══════════════════════════════════════════════════════════════
 # SESSION CONTEXT — chain IDs across API calls
@@ -244,9 +151,6 @@ with st.sidebar:
 
     if st.button("🏠 Home", use_container_width=True, key="nav_home"):
         _sel("home")
-
-    if st.button("🖥️ Examplify Notice", use_container_width=True, key="nav_examplify"):
-        _sel("examplify")
 
     with st.expander("🔧 Proctoru"):
         with st.expander("Admin Interface"):
@@ -1236,7 +1140,6 @@ def render_ctx_panel():
 
 PAGE_MAP = {
     "home":         page_home,
-    "examplify":    page_examplify,
     "pu_admin":     page_pu_admin_login,
     "pu_standalone": page_pu_standalone_login,
     "create_user":  page_create_user,
