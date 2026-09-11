@@ -136,7 +136,8 @@ def extract_and_save(result: dict, **explicit):
         first = inner[0]
         if isinstance(first, dict):
             for key in ["uuid", "exam_uuid", "delivery_window_uuid",
-                        "vendor_uuid", "tc_location_id", "appointment_uuid"]:
+                        "vendor_uuid", "tc_location_id", "appointment_uuid",
+                        "vendor_time_slot_id"]:
                 if first.get(key):
                     set_ctx(**{key: first[key]})
 
@@ -993,6 +994,7 @@ def page_tc_post_appointment():
     iid = get_ctx("institution_uuid"); eid = get_ctx("exam_uuid")
     vid = get_ctx("vendor_uuid");      loc = get_ctx("tc_location_id")
     dwid = get_ctx("delivery_window_uuid")
+    vtsi = get_ctx("vendor_time_slot_id")
     if iid or eid:
         st.info("💡 Chain IDs pre-filled from session.")
     fn, ln = rand_name(); tag = random.randint(1000, 9999)
@@ -1006,9 +1008,11 @@ def page_tc_post_appointment():
         ts_start = c3.text_input("time_slot start_time", placeholder="2026-09-02T09:00:00Z")
         ts_end   = c4.text_input("time_slot end_time",   placeholder="2026-09-02T11:00:00Z")
         c5, c6 = st.columns(2)
-        ts_vendor_uuid    = c5.text_input("vendor_uuid",    value=vid,  placeholder="From TC: Test Locations")
-        ts_tc_location_id = c6.text_input("tc_location_id", value=loc,  placeholder="From TC: Test Locations")
-        delivery_window_uuid = st.text_input("delivery_window_uuid", value=dwid, placeholder="From TC: Delivery Windows")
+        ts_vendor_uuid        = c5.text_input("vendor_uuid",            value=vid,  placeholder="From TC: Test Locations")
+        ts_tc_location_id     = c6.text_input("test_center_location_id", value=loc,  placeholder="From TC: Test Locations")
+        c7, c8 = st.columns(2)
+        delivery_window_uuid  = c7.text_input("delivery_window_uuid",   value=dwid, placeholder="From TC: Delivery Windows")
+        vendor_time_slot_id   = c8.text_input("vendor_time_slot_id",    value=vtsi, placeholder="From TC: Availability")
         st.markdown("**Student**")
         c7, c8 = st.columns(2)
         u_first = c7.text_input("first_name",  value=fn)
@@ -1021,8 +1025,10 @@ def page_tc_post_appointment():
     if submitted:
         body = {
             "time_slot": {"start_time": ts_start, "end_time": ts_end,
-                          "vendor_uuid": ts_vendor_uuid, "tc_location_id": ts_tc_location_id,
-                          "delivery_window_uuid": delivery_window_uuid},
+                          "vendor_uuid": ts_vendor_uuid,
+                          "test_center_location_id": ts_tc_location_id,
+                          "delivery_window_uuid": delivery_window_uuid,
+                          "vendor_time_slot_id": vendor_time_slot_id},
             "user": {"first_name": u_first, "last_name": u_last,
                      "email": u_email, "external_id": u_external_id, "phone": u_phone},
         }
@@ -1065,7 +1071,8 @@ CTX_SECTIONS = {
                                "reservation_id", "reservation_uuid"],
     "Exam":                  ["exam_id", "term_id"],
     "Test Center Chain":     ["institution_uuid", "exam_uuid", "delivery_window_uuid",
-                              "vendor_uuid", "tc_location_id", "appointment_uuid"],
+                              "vendor_uuid", "tc_location_id", "vendor_time_slot_id",
+                              "appointment_uuid"],
 }
 
 CTX_SOURCES = {
@@ -1082,6 +1089,7 @@ CTX_SOURCES = {
     "delivery_window_uuid": "TC: Delivery Windows",
     "vendor_uuid":          "TC: Test Locations",
     "tc_location_id":       "TC: Test Locations",
+    "vendor_time_slot_id":  "TC: Availability",
     "appointment_uuid":     "TC: Post Appointment",
 }
 
